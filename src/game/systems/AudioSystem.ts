@@ -15,6 +15,7 @@ const soundMap: Record<SoundKey, string> = {
 
 const loadedSounds = new Map<string, Audio.Sound>();
 let music: Audio.Sound | undefined;
+let musicStarting = false;
 
 export async function playSound(sound: SoundKey) {
   const asset = getAsset(soundMap[sound]);
@@ -37,7 +38,7 @@ export async function playSound(sound: SoundKey) {
 }
 
 export async function startMusic() {
-  if (music) {
+  if (music || musicStarting) {
     return;
   }
 
@@ -47,6 +48,7 @@ export async function startMusic() {
   }
 
   try {
+    musicStarting = true;
     const created = await Audio.Sound.createAsync(asset.sound, {
       isLooping: true,
       volume: 0.16
@@ -55,6 +57,8 @@ export async function startMusic() {
     await music.playAsync();
   } catch (error) {
     console.log("[music:start]", error);
+  } finally {
+    musicStarting = false;
   }
 }
 

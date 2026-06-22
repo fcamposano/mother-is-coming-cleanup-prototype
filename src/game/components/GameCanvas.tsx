@@ -124,8 +124,8 @@ export function GameCanvas({
         {messes.map((mess) => (
           <MessView key={mess.id} mess={mess} debugMode={debugMode} showFlag={showInspection && !mess.cleaned} />
         ))}
-        {showInspection ? <Inspector level={level} /> : null}
       </View>
+      {showInspection ? <Inspector level={level} /> : null}
     </View>
   );
 }
@@ -188,16 +188,16 @@ function MessView({
       style={[
         styles.mess,
         asset.image ? styles.messWithImage : null,
-        debugMode && styles.debugHitbox,
-        wrongTool && styles.wrongTool,
         {
           left: mess.x,
           top: mess.y,
           width: mess.width,
           height: mess.height,
-          backgroundColor: asset.color,
-          borderColor: asset.accentColor
-        }
+          backgroundColor: asset.image ? "transparent" : asset.color,
+          borderColor: asset.image ? "transparent" : asset.accentColor
+        },
+        debugMode && styles.debugHitbox,
+        wrongTool && styles.wrongTool
       ]}
     >
       {asset.image ? (
@@ -365,7 +365,9 @@ const styles = StyleSheet.create({
     height: "100%"
   },
   wrongTool: {
+    backgroundColor: "rgba(255,23,68,0.12)",
     borderColor: "#ff1744",
+    borderWidth: 4,
     transform: [{ rotate: "-2deg" }]
   },
   wrongText: {
@@ -396,7 +398,8 @@ const styles = StyleSheet.create({
     width: 36
   },
   debugHitbox: {
-    borderColor: "#00ff66"
+    borderColor: "#00ff66",
+    borderWidth: 3
   },
   debugId: {
     backgroundColor: "rgba(0,0,0,0.72)",
@@ -425,9 +428,9 @@ const styles = StyleSheet.create({
   },
   inspector: {
     alignItems: "center",
-    left: 266,
+    bottom: 126,
     position: "absolute",
-    top: 820
+    right: 12
   },
   inspectorBody: {
     alignItems: "center",

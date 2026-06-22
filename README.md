@@ -2,10 +2,22 @@
 
 An iPhone-first Expo/React Native vertical slice for a funny 2D room-cleaning game. The prototype tests the core loop: pan around a room larger than the screen, select a tool, clean the right messes, and survive inspection when mom arrives.
 
+## What Exists Now
+
+- A data-driven bedroom level in `src/game/levels/levelBedroom.ts`.
+- A pannable 980x1480 room with generated placeholder room and sprite assets.
+- Three tools: Vacuum, Mop, and Hand.
+- Nine mess items split across dry dirt, wet spills, and pickup clutter.
+- Drag/rub cleaning with correct-tool progress and wrong-tool feedback.
+- Countdown timer, win state, inspection state, loss state, and retryable result screen.
+- Mother/inspector placeholder during inspection.
+- Red flags on missed messes during inspection/loss.
+- Debug overlay with phase, camera, viewport, world size, timer, selected tool, remaining count, and missed ids.
+
 ## Install Dependencies
 
 ```bash
-cd "apps/cleanup-game"
+cd "/Users/fcamposa/Documents/New project/apps/cleanup-game"
 npm install
 ```
 
@@ -15,7 +27,7 @@ npm install
 2. Start the dev server:
 
 ```bash
-cd "apps/cleanup-game"
+cd "/Users/fcamposa/Documents/New project/apps/cleanup-game"
 npm start
 ```
 
@@ -26,7 +38,7 @@ Use the same Wi-Fi network for the computer and phone. If the phone cannot conne
 ## Run On iOS Simulator
 
 ```bash
-cd "apps/cleanup-game"
+cd "/Users/fcamposa/Documents/New project/apps/cleanup-game"
 npm run ios
 ```
 
@@ -64,6 +76,31 @@ npm run build:pages
 - Clean everything before the timer ends to win.
 - If time expires, mom appears, missed messes get red flags, and the result screen appears.
 - Tap `DBG` to show camera position, selected tool, remaining mess count, hitboxes, and item ids.
+
+## Local Verification
+
+Useful commands:
+
+```bash
+npm run typecheck
+npm run build:web
+npm start
+```
+
+Current verified status:
+
+- `npm run typecheck` passes.
+- `npm run build:web` passes and exports the Expo web build to `dist/`.
+
+## Files Changed In The Latest Pass
+
+- `src/game/components/GameCanvas.tsx`: fixed image mess debug/wrong-tool style ordering and made the inspector screen-fixed during inspection/loss.
+- `src/game/components/DebugOverlay.tsx`: expanded debug data for camera, viewport, world, phase, timer, and missed ids.
+- `src/game/components/ResultModal.tsx`: added missed mess names to the loss result.
+- `src/game/state/gameStore.ts`: clamps camera when viewport size changes.
+- `src/game/systems/AudioSystem.ts`: prevents overlapping panic music loads from repeated touch events.
+- `src/screens/GameScreen.tsx`: wires richer debug/result data into the UI.
+- `README.md`: updated run instructions, current state, limitations, and next milestones.
 
 ## Add A New Mess Item
 
@@ -123,18 +160,19 @@ Next steps:
 
 ## Current Limitations
 
-- Placeholder visuals are React Native views, not final art.
-- Sounds are stubbed with stable event names.
+- Visuals and audio are generated placeholders, not final production art or sound design.
 - Cleaning progress is simple drag distance over hitboxes.
-- The inspection animation is intentionally minimal.
+- There are no particles, cleaning masks, or tool-specific animation polish yet.
+- The inspection animation is intentionally minimal and the result modal appears after a short fixed delay.
 - No level select, persistence, accessibility pass, or device performance tuning yet.
+- The app is tuned for portrait phone play first; tablet and landscape layout need a dedicated pass.
 - npm audit reports upstream dependency advisories from the Expo dependency tree; do not run breaking upgrades without checking Expo SDK compatibility.
 
 ## Recommended Next Milestones
 
-1. Replace placeholders with a real room background and transparent PNG mess sprites.
-2. Add asset-image rendering while keeping the registry-driven config.
-3. Add a second level to prove the level architecture.
-4. Improve game feel with tool-specific particles, sounds, and better cleaning masks.
-5. Add a camera minimap or off-screen mess hints.
-6. Add a short intro countdown and clearer final inspection choreography.
+1. Add a second room level to prove the data-driven level architecture.
+2. Replace generated placeholder art with final room, mess, tool, and mother assets.
+3. Improve game feel with tool-specific particles, sounds, rub trails, and cleaning masks.
+4. Add a camera minimap or off-screen mess hints.
+5. Add a short intro countdown and clearer final inspection choreography.
+6. Add persistence, level select, accessibility labels, and device performance tuning.

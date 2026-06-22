@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -31,6 +31,7 @@ export function GameScreen() {
   const retry = useGameStore((state) => state.retry);
   const cleanedCount = useGameStore(selectCleanedCount);
   const missedCount = useGameStore(selectMissedCount);
+  const missedLabels = useMemo(() => messes.filter((mess) => !mess.cleaned).map((mess) => mess.label), [messes]);
   const inspectionPlayedRef = useRef(false);
   const victoryPlayedRef = useRef(false);
 
@@ -137,7 +138,16 @@ export function GameScreen() {
           </View>
 
           {debugMode ? (
-            <DebugOverlay camera={camera} selectedTool={selectedTool} remainingMessCount={missedCount} />
+            <DebugOverlay
+              camera={camera}
+              phase={phase}
+              remainingMessCount={missedCount}
+              remainingSeconds={remainingSeconds}
+              selectedTool={selectedTool}
+              viewport={viewport}
+              world={{ width: level.worldWidth, height: level.worldHeight }}
+              messes={messes}
+            />
           ) : null}
 
           {phase === "inspection" ? (
@@ -165,6 +175,7 @@ export function GameScreen() {
             won={phase === "won"}
             cleanedCount={cleanedCount}
             missedCount={missedCount}
+            missedLabels={missedLabels}
             score={score}
             onRetry={retry}
           />

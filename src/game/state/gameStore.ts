@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 import { levelBedroom } from "../levels/levelBedroom";
+import { clampCamera } from "../systems/CameraSystem";
 import { applyCleaningStroke, createRuntimeMesses } from "../systems/CleaningSystem";
 import { getCleanedCount, getMissedCount, getWinBonus } from "../systems/ScoringSystem";
 import { Camera, GamePhase, LevelDefinition, MessRuntimeState, ToolType } from "../types/gameTypes";
@@ -39,7 +40,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
   phase: "playing",
   score: 0,
   debugMode: false,
-  setViewport: (width, height) => set({ viewport: { width, height } }),
+  setViewport: (width, height) =>
+    set((state) => ({
+      viewport: { width, height },
+      camera: clampCamera(state.camera, width, height, state.level.worldWidth, state.level.worldHeight)
+    })),
   setSelectedTool: (tool) => set({ selectedTool: tool }),
   setCamera: (camera) => set({ camera }),
   tick: (deltaSeconds) => {

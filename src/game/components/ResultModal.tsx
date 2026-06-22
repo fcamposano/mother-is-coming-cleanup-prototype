@@ -5,11 +5,12 @@ type ResultModalProps = {
   won: boolean;
   cleanedCount: number;
   missedCount: number;
+  missedLabels: string[];
   score: number;
   onRetry: () => void;
 };
 
-export function ResultModal({ visible, won, cleanedCount, missedCount, score, onRetry }: ResultModalProps) {
+export function ResultModal({ visible, won, cleanedCount, missedCount, missedLabels, score, onRetry }: ResultModalProps) {
   if (!visible) {
     return null;
   }
@@ -29,6 +30,12 @@ export function ResultModal({ visible, won, cleanedCount, missedCount, score, on
           <Stat label="Missed" value={missedCount} />
           <Stat label="Score" value={score} />
         </View>
+        {!won && missedLabels.length > 0 ? (
+          <View style={styles.missedWrap}>
+            <Text style={styles.missedTitle}>Missed messes</Text>
+            <Text style={styles.missedText}>{missedLabels.join(", ")}</Text>
+          </View>
+        ) : null}
         <Pressable onPress={onRetry} style={styles.retry}>
           <Text style={styles.retryText}>Retry panic clean</Text>
         </Pressable>
@@ -107,6 +114,27 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "900",
     textTransform: "uppercase"
+  },
+  missedWrap: {
+    backgroundColor: "#ffe0e5",
+    borderColor: "#ff4159",
+    borderRadius: 8,
+    borderWidth: 2,
+    marginTop: 14,
+    padding: 10
+  },
+  missedTitle: {
+    color: "#9d1829",
+    fontSize: 12,
+    fontWeight: "900",
+    textTransform: "uppercase"
+  },
+  missedText: {
+    color: "#5a252b",
+    fontSize: 14,
+    fontWeight: "800",
+    lineHeight: 19,
+    marginTop: 4
   },
   retry: {
     alignItems: "center",
