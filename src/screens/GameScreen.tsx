@@ -122,6 +122,7 @@ export function GameScreen() {
             camera={camera}
             viewport={viewport}
             phase={phase}
+            remainingSeconds={remainingSeconds}
             debugMode={debugMode}
             onSetCamera={setCamera}
             onCleanMess={handleCleanMess}

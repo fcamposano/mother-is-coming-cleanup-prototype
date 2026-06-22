@@ -12,6 +12,7 @@ type GameCanvasProps = {
   camera: Camera;
   viewport: { width: number; height: number };
   phase: GamePhase;
+  remainingSeconds: number;
   debugMode: boolean;
   onSetCamera: (camera: Camera) => void;
   onCleanMess: (messId: string, strokePower: number, now: number) => void;
@@ -28,6 +29,7 @@ export function GameCanvas({
   camera,
   viewport,
   phase,
+  remainingSeconds,
   debugMode,
   onSetCamera,
   onCleanMess
@@ -125,6 +127,7 @@ export function GameCanvas({
           <MessView key={mess.id} mess={mess} debugMode={debugMode} showFlag={showInspection && !mess.cleaned} />
         ))}
       </View>
+      {phase === "playing" ? <MotherApproach level={level} remainingSeconds={remainingSeconds} /> : null}
       {showInspection ? <Inspector level={level} /> : null}
     </View>
   );
@@ -234,6 +237,39 @@ function Inspector({ level }: { level: LevelDefinition }) {
       <View style={styles.scoldBubble}>
         <Text style={styles.scoldText}>I can still see it.</Text>
       </View>
+    </View>
+  );
+}
+
+function MotherApproach({ level, remainingSeconds }: { level: LevelDefinition; remainingSeconds: number }) {
+  const asset = getAsset(level.inspector.characterAssetKey);
+  const progress = Math.max(0, Math.min(1, 1 - remainingSeconds / level.timeLimitSeconds));
+  const size = 58 + progress * 138;
+  const opacity = 0.34 + progress * 0.62;
+  const urgent = remainingSeconds <= 10;
+
+  return (
+    <View
+      pointerEvents="none"
+      style={[
+        styles.motherApproach,
+        {
+          opacity,
+          transform: [{ translateY: (1 - progress) * 42 }, { scale: 0.82 + progress * 0.34 }]
+        }
+      ]}
+    >
+      <View style={[styles.motherAura, urgent && styles.motherAuraUrgent, { width: size + 18, height: size + 18 }]} />
+      {asset.image ? (
+        <Image source={asset.image} style={{ width: size, height: size * 1.3 }} resizeMode="contain" />
+      ) : (
+        <View style={[styles.motherFallback, { width: size, height: size }, { backgroundColor: asset.accentColor }]}>
+          <Text style={styles.motherFallbackText}>{asset.placeholderText}</Text>
+        </View>
+      )}
+      <Text style={[styles.motherApproachText, urgent && styles.motherApproachTextUrgent]}>
+        {urgent ? "MOTHER IS HERE" : "mother coming"}
+      </Text>
     </View>
   );
 }
@@ -461,5 +497,53 @@ const styles = StyleSheet.create({
     color: "#28231f",
     fontSize: 16,
     fontWeight: "900"
+  },
+  motherApproach: {
+    alignItems: "center",
+    position: "absolute",
+    right: 12,
+    top: 112
+  },
+  motherAura: {
+    backgroundColor: "rgba(255,255,255,0.28)",
+    borderColor: "rgba(255,23,68,0.38)",
+    borderRadius: 999,
+    borderWidth: 2,
+    position: "absolute",
+    top: 8
+  },
+  motherAuraUrgent: {
+    backgroundColor: "rgba(255,23,68,0.18)",
+    borderColor: "rgba(255,23,68,0.86)",
+    borderWidth: 4
+  },
+  motherFallback: {
+    alignItems: "center",
+    borderColor: "#28231f",
+    borderRadius: 999,
+    borderWidth: 3,
+    justifyContent: "center"
+  },
+  motherFallbackText: {
+    color: "#28231f",
+    fontSize: 18,
+    fontWeight: "900"
+  },
+  motherApproachText: {
+    backgroundColor: "rgba(255,250,243,0.9)",
+    borderColor: "#28231f",
+    borderRadius: 8,
+    borderWidth: 2,
+    color: "#28231f",
+    fontSize: 11,
+    fontWeight: "900",
+    marginTop: -6,
+    paddingHorizontal: 7,
+    paddingVertical: 4,
+    textTransform: "uppercase"
+  },
+  motherApproachTextUrgent: {
+    backgroundColor: "#ff1744",
+    color: "#ffffff"
   }
 });

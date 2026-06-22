@@ -6,7 +6,7 @@ export const levelBedroom: LevelDefinition = {
   roomAssetKey: "room_bedroom_placeholder",
   worldWidth: 980,
   worldHeight: 1480,
-  timeLimitSeconds: 75,
+  timeLimitSeconds: 40,
   inspector: {
     characterAssetKey: "character_mother_placeholder",
     arrivalSoundKey: "sfx_mother_arrival",

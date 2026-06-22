@@ -9,8 +9,8 @@ An iPhone-first Expo/React Native vertical slice for a funny 2D room-cleaning ga
 - Three tools: Vacuum, Mop, and Hand.
 - Nine mess items split across dry dirt, wet spills, and pickup clutter.
 - Drag/rub cleaning with correct-tool progress and wrong-tool feedback.
-- Countdown timer, win state, inspection state, loss state, and retryable result screen.
-- Mother/inspector placeholder during inspection.
+- 40-second countdown timer, win state, inspection state, loss state, and retryable result screen.
+- Mother/inspector placeholder approaches as time runs out, then freezes play during inspection.
 - Red flags on missed messes during inspection/loss.
 - Debug overlay with phase, camera, viewport, world size, timer, selected tool, remaining count, and missed ids.
 
@@ -74,7 +74,7 @@ npm run build:pages
 - Drag over a mess with the correct tool to clean it.
 - Wrong tools flash a warning and do not clean.
 - Clean everything before the timer ends to win.
-- If time expires, mom appears, missed messes get red flags, and the result screen appears.
+- If time expires, mom freezes play, screams, missed messes get red flags, and the result screen appears.
 - Tap `DBG` to show camera position, selected tool, remaining mess count, hitboxes, and item ids.
 
 ## Local Verification
@@ -150,17 +150,40 @@ Use debug mode to tune `x`, `y`, `width`, and `height`.
 2. Point the store at the new level in [src/game/state/gameStore.ts](src/game/state/gameStore.ts).
 3. Reuse existing systems and components; room content should live in the level config, not rendering logic.
 
-## Replace Character Images
+## Add A Real Mother Picture
 
 Character placeholders are configured in [src/game/assets/AssetRegistry.ts](src/game/assets/AssetRegistry.ts).
 
-For real photos or transparent PNG cutouts:
+For a real mother picture, use a PNG cutout with transparency if possible. Only use a real person's photo with consent and distribution permission.
 
-1. Add the image file under a future `assets/characters/` folder.
-2. Add an `image: require("...")` entry to the character asset.
-3. Update the renderer to prefer `asset.image` over the placeholder block.
+1. Add the image file under `assets/characters/`, for example:
 
-Only use real-person photos/cutouts with consent and distribution permission.
+```text
+assets/characters/mother-real.png
+```
+
+2. Edit `character_mother_placeholder` in [src/game/assets/AssetRegistry.ts](src/game/assets/AssetRegistry.ts):
+
+```ts
+character_mother_placeholder: {
+  key: "character_mother_placeholder",
+  kind: "character",
+  label: "Mother",
+  placeholderText: "MOM",
+  color: "#2c2c2c",
+  accentColor: "#ff5b6e",
+  image: require("../../../assets/characters/mother-real.png")
+}
+```
+
+3. Run:
+
+```bash
+npm run typecheck
+npm run build:pages
+```
+
+The same registry image is used for both the countdown approach and the final inspection state.
 
 ## Replace Tool Images
 
