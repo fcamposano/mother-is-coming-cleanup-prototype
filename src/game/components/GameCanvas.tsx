@@ -1,5 +1,5 @@
 import { useMemo, useRef } from "react";
-import { PanResponder, StyleSheet, Text, View } from "react-native";
+import { Image, PanResponder, StyleSheet, Text, View } from "react-native";
 
 import { getAsset } from "../assets/AssetRegistry";
 import { clampCamera, screenToWorld } from "../systems/CameraSystem";
@@ -120,7 +120,7 @@ export function GameCanvas({
           }
         ]}
       >
-        <RoomDressing />
+        {roomAsset.image ? <Image source={roomAsset.image} style={styles.roomImage} resizeMode="stretch" /> : <RoomDressing />}
         {messes.map((mess) => (
           <MessView key={mess.id} mess={mess} debugMode={debugMode} showFlag={showInspection && !mess.cleaned} />
         ))}
@@ -187,6 +187,7 @@ function MessView({
     <View
       style={[
         styles.mess,
+        asset.image ? styles.messWithImage : null,
         debugMode && styles.debugHitbox,
         wrongTool && styles.wrongTool,
         {
@@ -199,10 +200,15 @@ function MessView({
         }
       ]}
     >
-      <View style={styles.messBlob}>
-        <Text style={styles.messText}>{asset.placeholderText}</Text>
-        <Text style={styles.messLabel}>{mess.label}</Text>
-      </View>
+      {asset.image ? (
+        <Image source={asset.image} style={[styles.messImage, { opacity: 1 - progress * 0.72 }]} resizeMode="contain" />
+      ) : (
+        <View style={styles.messBlob}>
+          <Text style={styles.messText}>{asset.placeholderText}</Text>
+          <Text style={styles.messLabel}>{mess.label}</Text>
+        </View>
+      )}
+      {asset.image ? <Text style={styles.imageMessLabel}>{mess.label}</Text> : null}
       <View style={styles.progressTrack}>
         <View style={[styles.progressFill, { width: `${progress * 100}%` }]} />
       </View>
@@ -218,9 +224,13 @@ function Inspector({ level }: { level: LevelDefinition }) {
 
   return (
     <View style={styles.inspector}>
-      <View style={[styles.inspectorBody, { backgroundColor: asset.accentColor, borderColor: asset.color }]}>
-        <Text style={styles.inspectorText}>{asset.placeholderText}</Text>
-      </View>
+      {asset.image ? (
+        <Image source={asset.image} style={styles.inspectorImage} resizeMode="contain" />
+      ) : (
+        <View style={[styles.inspectorBody, { backgroundColor: asset.accentColor, borderColor: asset.color }]}>
+          <Text style={styles.inspectorText}>{asset.placeholderText}</Text>
+        </View>
+      )}
       <View style={styles.scoldBubble}>
         <Text style={styles.scoldText}>I can still see it.</Text>
       </View>
@@ -236,6 +246,13 @@ const styles = StyleSheet.create({
   },
   world: {
     position: "absolute"
+  },
+  roomImage: {
+    height: "100%",
+    left: 0,
+    position: "absolute",
+    top: 0,
+    width: "100%"
   },
   furniture: {
     alignItems: "center",
@@ -292,6 +309,28 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     opacity: 0.94,
     padding: 8,
+    position: "absolute"
+  },
+  messWithImage: {
+    backgroundColor: "transparent",
+    borderColor: "transparent",
+    borderWidth: 0,
+    overflow: "visible"
+  },
+  messImage: {
+    height: "100%",
+    width: "100%"
+  },
+  imageMessLabel: {
+    backgroundColor: "rgba(40,35,31,0.72)",
+    borderRadius: 6,
+    bottom: -16,
+    color: "#fffaf3",
+    fontSize: 10,
+    fontWeight: "900",
+    left: 8,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
     position: "absolute"
   },
   messBlob: {
@@ -397,6 +436,10 @@ const styles = StyleSheet.create({
     height: 240,
     justifyContent: "center",
     width: 178
+  },
+  inspectorImage: {
+    height: 270,
+    width: 200
   },
   inspectorText: {
     color: "#28231f",

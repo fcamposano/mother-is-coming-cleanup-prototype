@@ -7,7 +7,7 @@ import { GameCanvas } from "../game/components/GameCanvas";
 import { ResultModal } from "../game/components/ResultModal";
 import { TimerBar } from "../game/components/TimerBar";
 import { ToolSelector } from "../game/components/ToolSelector";
-import { playSound } from "../game/systems/AudioSystem";
+import { playSound, startMusic, stopMusic } from "../game/systems/AudioSystem";
 import { triggerHaptic } from "../game/systems/HapticsSystem";
 import { selectCleanedCount, selectMissedCount, useGameStore } from "../game/state/gameStore";
 
@@ -46,8 +46,18 @@ export function GameScreen() {
   }, [tick]);
 
   useEffect(() => {
+    if (phase === "playing") {
+      void startMusic();
+      return;
+    }
+
+    void stopMusic();
+  }, [phase]);
+
+  useEffect(() => {
     if (phase === "inspection" && !inspectionPlayedRef.current) {
       inspectionPlayedRef.current = true;
+      void stopMusic();
       playSound("motherArrival");
       triggerHaptic("warning");
 
@@ -68,6 +78,7 @@ export function GameScreen() {
 
     if (phase === "won" && !victoryPlayedRef.current) {
       victoryPlayedRef.current = true;
+      void stopMusic();
       playSound("victory");
       triggerHaptic("success");
     }
@@ -81,6 +92,7 @@ export function GameScreen() {
   }, [finishInspection, phase]);
 
   const handleCleanMess = (messId: string, strokePower: number, now: number) => {
+    void startMusic();
     const result = cleanMess(messId, strokePower, now);
 
     if (result.wrongTool) {
@@ -89,7 +101,7 @@ export function GameScreen() {
       return;
     }
 
-    playSound("clean");
+    playSound(result.cleanedNow ? "pickup" : "clean");
     triggerHaptic(result.cleanedNow ? "success" : "light");
   };
 
@@ -139,7 +151,13 @@ export function GameScreen() {
               <Text style={styles.countText}>Cleaned {cleanedCount}/{messes.length}</Text>
               <Text style={styles.scoreText}>Score {score}</Text>
             </View>
-            <ToolSelector selectedTool={selectedTool} onSelectTool={setSelectedTool} />
+            <ToolSelector
+              selectedTool={selectedTool}
+              onSelectTool={(tool) => {
+                void startMusic();
+                setSelectedTool(tool);
+              }}
+            />
           </View>
 
           <ResultModal

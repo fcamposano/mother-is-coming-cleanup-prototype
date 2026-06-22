@@ -6,7 +6,8 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     kind: "room",
     label: "Bedroom",
     color: "#f8efe0",
-    accentColor: "#5b8f8f"
+    accentColor: "#5b8f8f",
+    image: require("../../../assets/rooms/bedroom-cartoon.png")
   },
   mess_crumbs: {
     key: "mess_crumbs",
@@ -14,7 +15,8 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     label: "Crumbs",
     placeholderText: "crumbs",
     color: "#9a6b36",
-    accentColor: "#f0c06d"
+    accentColor: "#f0c06d",
+    image: require("../../../assets/messes/crumbs.png")
   },
   mess_dust: {
     key: "mess_dust",
@@ -22,7 +24,8 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     label: "Dust",
     placeholderText: "dust",
     color: "#a9a19a",
-    accentColor: "#ded7cf"
+    accentColor: "#ded7cf",
+    image: require("../../../assets/messes/dust.png")
   },
   mess_debris: {
     key: "mess_debris",
@@ -30,7 +33,8 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     label: "Dry bits",
     placeholderText: "bits",
     color: "#785a42",
-    accentColor: "#c7a27c"
+    accentColor: "#c7a27c",
+    image: require("../../../assets/messes/debris.png")
   },
   mess_juice: {
     key: "mess_juice",
@@ -38,7 +42,8 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     label: "Juice",
     placeholderText: "juice",
     color: "#d74252",
-    accentColor: "#ff9aa9"
+    accentColor: "#ff9aa9",
+    image: require("../../../assets/messes/juice.png")
   },
   mess_mud: {
     key: "mess_mud",
@@ -46,7 +51,8 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     label: "Mud",
     placeholderText: "mud",
     color: "#6b4d33",
-    accentColor: "#a9784c"
+    accentColor: "#a9784c",
+    image: require("../../../assets/messes/mud.png")
   },
   mess_sticky: {
     key: "mess_sticky",
@@ -54,7 +60,8 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     label: "Sticky",
     placeholderText: "sticky",
     color: "#f0a020",
-    accentColor: "#ffd36d"
+    accentColor: "#ffd36d",
+    image: require("../../../assets/messes/sticky.png")
   },
   mess_clothes: {
     key: "mess_clothes",
@@ -62,7 +69,8 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     label: "Clothes",
     placeholderText: "shirt",
     color: "#4a72d9",
-    accentColor: "#a8c3ff"
+    accentColor: "#a8c3ff",
+    image: require("../../../assets/messes/clothes.png")
   },
   mess_toys: {
     key: "mess_toys",
@@ -70,7 +78,8 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     label: "Toys",
     placeholderText: "toys",
     color: "#9257c8",
-    accentColor: "#d9b8ff"
+    accentColor: "#d9b8ff",
+    image: require("../../../assets/messes/toys.png")
   },
   mess_trash: {
     key: "mess_trash",
@@ -78,7 +87,8 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     label: "Trash",
     placeholderText: "trash",
     color: "#3d8c61",
-    accentColor: "#9be0b8"
+    accentColor: "#9be0b8",
+    image: require("../../../assets/messes/trash.png")
   },
   character_mother_placeholder: {
     key: "character_mother_placeholder",
@@ -86,7 +96,8 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     label: "Mother Placeholder",
     placeholderText: "MOM",
     color: "#2c2c2c",
-    accentColor: "#ff5b6e"
+    accentColor: "#ff5b6e",
+    image: require("../../../assets/characters/mother-cartoon.png")
   },
   tool_vacuum: {
     key: "tool_vacuum",
@@ -94,7 +105,8 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     label: "Vacuum",
     placeholderText: "VAC",
     color: "#3457d5",
-    accentColor: "#b9c9ff"
+    accentColor: "#b9c9ff",
+    image: require("../../../assets/tools/vacuum.png")
   },
   tool_mop: {
     key: "tool_mop",
@@ -102,7 +114,8 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     label: "Mop",
     placeholderText: "MOP",
     color: "#008c8c",
-    accentColor: "#a7f0e8"
+    accentColor: "#a7f0e8",
+    image: require("../../../assets/tools/mop.png")
   },
   tool_hand: {
     key: "tool_hand",
@@ -110,13 +123,16 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     label: "Hand",
     placeholderText: "HAND",
     color: "#d87932",
-    accentColor: "#ffd2a8"
+    accentColor: "#ffd2a8",
+    image: require("../../../assets/tools/hand.png")
   },
-  sfx_clean: { key: "sfx_clean", kind: "sound", label: "Clean sound placeholder" },
-  sfx_wrong_tool: { key: "sfx_wrong_tool", kind: "sound", label: "Wrong tool sound placeholder" },
-  sfx_mother_arrival: { key: "sfx_mother_arrival", kind: "sound", label: "Mother arrival placeholder" },
-  sfx_scream: { key: "sfx_scream", kind: "sound", label: "Scream placeholder" },
-  sfx_victory: { key: "sfx_victory", kind: "sound", label: "Victory placeholder" }
+  sfx_clean: { key: "sfx_clean", kind: "sound", label: "Clean sound", sound: require("../../../assets/audio/clean.wav") },
+  sfx_pickup: { key: "sfx_pickup", kind: "sound", label: "Pickup sound", sound: require("../../../assets/audio/pickup.wav") },
+  sfx_wrong_tool: { key: "sfx_wrong_tool", kind: "sound", label: "Wrong tool sound", sound: require("../../../assets/audio/wrong-tool.wav") },
+  sfx_mother_arrival: { key: "sfx_mother_arrival", kind: "sound", label: "Mother arrival sound", sound: require("../../../assets/audio/wrong-tool.wav") },
+  sfx_scream: { key: "sfx_scream", kind: "sound", label: "Scream sound", sound: require("../../../assets/audio/scream.wav") },
+  sfx_victory: { key: "sfx_victory", kind: "sound", label: "Victory sound", sound: require("../../../assets/audio/victory.wav") },
+  music_panic_loop: { key: "music_panic_loop", kind: "sound", label: "Panic loop", sound: require("../../../assets/audio/panic-loop.wav") }
 };
 
 export function getAsset(assetKey: string): AssetDefinition {

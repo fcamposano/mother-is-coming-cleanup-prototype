@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { getAsset } from "../assets/AssetRegistry";
 import { ToolType } from "../types/gameTypes";
@@ -31,7 +31,11 @@ export function ToolSelector({ selectedTool, onSelectTool }: ToolSelectorProps) 
               selected && styles.selected
             ]}
           >
-            <Text style={[styles.icon, { color: asset.color }]}>{asset.placeholderText}</Text>
+            {asset.image ? (
+              <Image source={asset.image} style={styles.image} resizeMode="contain" />
+            ) : (
+              <Text style={[styles.icon, { color: asset.color }]}>{asset.placeholderText}</Text>
+            )}
             <Text style={styles.label}>{label}</Text>
           </Pressable>
         );
@@ -64,6 +68,10 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: 16,
     fontWeight: "900"
+  },
+  image: {
+    height: 38,
+    width: 38
   },
   label: {
     color: "#28231f",

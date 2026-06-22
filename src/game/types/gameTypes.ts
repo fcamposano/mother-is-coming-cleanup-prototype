@@ -1,3 +1,6 @@
+import { AVPlaybackSource } from "expo-av";
+import { ImageSourcePropType } from "react-native";
+
 export type ToolType = "vacuum" | "mop" | "hand";
 
 export type MessType = "dry_dirt" | "wet_spill" | "pickup";
@@ -11,8 +14,8 @@ export type AssetDefinition = {
   placeholderText?: string;
   color?: string;
   accentColor?: string;
-  image?: number;
-  sound?: number;
+  image?: ImageSourcePropType;
+  sound?: AVPlaybackSource;
 };
 
 export type MessItemDefinition = {
