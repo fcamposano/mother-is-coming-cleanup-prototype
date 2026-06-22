@@ -1,0 +1,143 @@
+import { LevelDefinition } from "../types/gameTypes";
+
+export const levelBedroom: LevelDefinition = {
+  id: "messy-bedroom-001",
+  title: "Saturday Panic Bedroom",
+  roomAssetKey: "room_bedroom_placeholder",
+  worldWidth: 980,
+  worldHeight: 1480,
+  timeLimitSeconds: 75,
+  inspector: {
+    characterAssetKey: "character_mother_placeholder",
+    arrivalSoundKey: "sfx_mother_arrival",
+    screamSoundKey: "sfx_scream"
+  },
+  messItems: [
+    {
+      id: "crumbs-desk",
+      label: "Desk Crumbs",
+      messType: "dry_dirt",
+      requiredTool: "vacuum",
+      x: 132,
+      y: 218,
+      width: 132,
+      height: 82,
+      assetKey: "mess_crumbs",
+      cleanProgressRequired: 90,
+      scoreValue: 100,
+      roomAssociation: "desk"
+    },
+    {
+      id: "dust-under-bed",
+      label: "Dust Drift",
+      messType: "dry_dirt",
+      requiredTool: "vacuum",
+      x: 626,
+      y: 380,
+      width: 168,
+      height: 80,
+      assetKey: "mess_dust",
+      cleanProgressRequired: 110,
+      scoreValue: 125,
+      roomAssociation: "bed"
+    },
+    {
+      id: "snack-bits-door",
+      label: "Snack Bits",
+      messType: "dry_dirt",
+      requiredTool: "vacuum",
+      x: 392,
+      y: 1194,
+      width: 148,
+      height: 92,
+      assetKey: "mess_debris",
+      cleanProgressRequired: 100,
+      scoreValue: 110,
+      roomAssociation: "door"
+    },
+    {
+      id: "juice-rug",
+      label: "Juice Puddle",
+      messType: "wet_spill",
+      requiredTool: "mop",
+      x: 246,
+      y: 514,
+      width: 176,
+      height: 124,
+      assetKey: "mess_juice",
+      cleanProgressRequired: 120,
+      scoreValue: 140,
+      roomAssociation: "rug"
+    },
+    {
+      id: "mud-window",
+      label: "Muddy Prints",
+      messType: "wet_spill",
+      requiredTool: "mop",
+      x: 696,
+      y: 792,
+      width: 158,
+      height: 126,
+      assetKey: "mess_mud",
+      cleanProgressRequired: 130,
+      scoreValue: 150,
+      roomAssociation: "window"
+    },
+    {
+      id: "sticky-nightstand",
+      label: "Mystery Sticky",
+      messType: "wet_spill",
+      requiredTool: "mop",
+      x: 92,
+      y: 1018,
+      width: 150,
+      height: 112,
+      assetKey: "mess_sticky",
+      cleanProgressRequired: 115,
+      scoreValue: 130,
+      roomAssociation: "nightstand"
+    },
+    {
+      id: "clothes-volcano",
+      label: "Clothes Volcano",
+      messType: "pickup",
+      requiredTool: "hand",
+      x: 568,
+      y: 102,
+      width: 172,
+      height: 138,
+      assetKey: "mess_clothes",
+      cleanProgressRequired: 80,
+      scoreValue: 115,
+      roomAssociation: "closet"
+    },
+    {
+      id: "toy-ambush",
+      label: "Toy Ambush",
+      messType: "pickup",
+      requiredTool: "hand",
+      x: 504,
+      y: 640,
+      width: 188,
+      height: 122,
+      assetKey: "mess_toys",
+      cleanProgressRequired: 95,
+      scoreValue: 125,
+      roomAssociation: "floor"
+    },
+    {
+      id: "trash-bedside",
+      label: "Trash Nest",
+      messType: "pickup",
+      requiredTool: "hand",
+      x: 672,
+      y: 1224,
+      width: 168,
+      height: 132,
+      assetKey: "mess_trash",
+      cleanProgressRequired: 85,
+      scoreValue: 115,
+      roomAssociation: "bedside"
+    }
+  ]
+};

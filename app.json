@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "Mother Is Coming",
+    "slug": "mother-is-coming-cleanup-prototype",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "platforms": ["ios", "android", "web"],
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": false
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#f8efe0"
+      }
+    }
+  }
+}
