@@ -93,11 +93,11 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
   character_mother_placeholder: {
     key: "character_mother_placeholder",
     kind: "character",
-    label: "Mother Placeholder",
+    label: "Mother",
     placeholderText: "MOM",
     color: "#2c2c2c",
     accentColor: "#ff5b6e",
-    image: require("../../../assets/characters/mother-cartoon.png")
+    image: require("../../../assets/characters/mother-real.png")
   },
   tool_vacuum: {
     key: "tool_vacuum",
