@@ -7,9 +7,9 @@ import { TitanOne_400Regular } from "@expo-google-fonts/titan-one";
 import { GameScreen } from "./src/screens/GameScreen";
 
 export default function App() {
-  const [fontsLoaded] = useFonts({ TitanOne_400Regular });
+  const [fontsLoaded, fontError] = useFonts({ TitanOne_400Regular });
 
-  if (!fontsLoaded) {
+  if (!fontsLoaded && !fontError) {
     return null;
   }
 
