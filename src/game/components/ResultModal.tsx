@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   title: {
     color: "#28231f",
     fontSize: 30,
-    fontWeight: "900",
+    fontFamily: "TitanOne_400Regular",
     marginTop: 6
   },
   joke: {

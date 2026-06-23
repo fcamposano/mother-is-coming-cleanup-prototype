@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
-import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Animated, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { DebugOverlay } from "../game/components/DebugOverlay";
@@ -34,6 +34,10 @@ export function GameScreen() {
   const missedLabels = useMemo(() => messes.filter((mess) => !mess.cleaned).map((mess) => mess.label), [messes]);
   const inspectionPlayedRef = useRef(false);
   const victoryPlayedRef = useRef(false);
+  const vignetteAnim = useRef(new Animated.Value(0)).current;
+  const vignetteLoopRef = useRef<Animated.CompositeAnimation | null>(null);
+  const shakeAnim = useRef(new Animated.Value(0)).current;
+  const shakeTriggeredRef = useRef(false);
 
   useEffect(() => {
     let last = Date.now();
@@ -54,6 +58,42 @@ export function GameScreen() {
 
     void stopMusic();
   }, [phase]);
+
+  useEffect(() => {
+    if (phase !== "playing") {
+      vignetteLoopRef.current?.stop();
+      vignetteAnim.setValue(0);
+      shakeTriggeredRef.current = false;
+      return;
+    }
+
+    if (remainingSeconds <= 5 && remainingSeconds > 0) {
+      if (!vignetteLoopRef.current) {
+        vignetteLoopRef.current = Animated.loop(
+          Animated.sequence([
+            Animated.timing(vignetteAnim, { toValue: 0.55, duration: 250, useNativeDriver: true }),
+            Animated.timing(vignetteAnim, { toValue: 0.1, duration: 350, useNativeDriver: true })
+          ])
+        );
+        vignetteLoopRef.current.start();
+      }
+    } else {
+      vignetteLoopRef.current?.stop();
+      vignetteLoopRef.current = null;
+      vignetteAnim.setValue(0);
+    }
+
+    if (remainingSeconds <= 10 && !shakeTriggeredRef.current) {
+      shakeTriggeredRef.current = true;
+      Animated.sequence([
+        Animated.timing(shakeAnim, { toValue: 7, duration: 60, useNativeDriver: true }),
+        Animated.timing(shakeAnim, { toValue: -7, duration: 60, useNativeDriver: true }),
+        Animated.timing(shakeAnim, { toValue: 5, duration: 60, useNativeDriver: true }),
+        Animated.timing(shakeAnim, { toValue: -5, duration: 60, useNativeDriver: true }),
+        Animated.timing(shakeAnim, { toValue: 0, duration: 60, useNativeDriver: true })
+      ]).start();
+    }
+  }, [phase, remainingSeconds, vignetteAnim, shakeAnim]);
 
   useEffect(() => {
     if (phase === "inspection" && !inspectionPlayedRef.current) {
@@ -109,8 +149,8 @@ export function GameScreen() {
   return (
     <GestureHandlerRootView style={styles.root}>
       <SafeAreaView style={styles.root}>
-        <View
-          style={styles.screen}
+        <Animated.View
+          style={[styles.screen, { transform: [{ translateX: shakeAnim }] }]}
           onLayout={(event) => {
             const { width, height } = event.nativeEvent.layout;
             setViewport(width, height);
@@ -138,6 +178,11 @@ export function GameScreen() {
             </View>
           </View>
 
+          <Animated.View
+            pointerEvents="none"
+            style={[StyleSheet.absoluteFill, styles.vignette, { opacity: vignetteAnim }]}
+          />
+
           {debugMode ? (
             <DebugOverlay
               camera={camera}
@@ -149,12 +194,6 @@ export function GameScreen() {
               world={{ width: level.worldWidth, height: level.worldHeight }}
               messes={messes}
             />
-          ) : null}
-
-          {phase === "inspection" ? (
-            <View style={styles.inspectionBanner}>
-              <Text style={styles.inspectionText}>MOM INSPECTION IN PROGRESS</Text>
-            </View>
           ) : null}
 
           <View style={styles.bottomHud}>
@@ -180,7 +219,7 @@ export function GameScreen() {
             score={score}
             onRetry={retry}
           />
-        </View>
+        </Animated.View>
       </SafeAreaView>
     </GestureHandlerRootView>
   );
@@ -212,9 +251,13 @@ const styles = StyleSheet.create({
     color: "#28231f",
     flexShrink: 1,
     fontSize: 15,
-    fontWeight: "900",
+    fontFamily: "TitanOne_400Regular",
     paddingHorizontal: 10,
     paddingVertical: 7
+  },
+  vignette: {
+    backgroundColor: "#ff1744",
+    pointerEvents: "none"
   },
   debugButton: {
     alignItems: "center",
@@ -234,22 +277,6 @@ const styles = StyleSheet.create({
     color: "#28231f",
     fontSize: 12,
     fontWeight: "900"
-  },
-  inspectionBanner: {
-    backgroundColor: "#ff1744",
-    borderColor: "#ffffff",
-    borderWidth: 3,
-    left: 16,
-    padding: 10,
-    position: "absolute",
-    right: 16,
-    top: 186
-  },
-  inspectionText: {
-    color: "#ffffff",
-    fontSize: 16,
-    fontWeight: "900",
-    textAlign: "center"
   },
   bottomHud: {
     backgroundColor: "rgba(255,250,243,0.94)",

@@ -1,5 +1,5 @@
-import { useMemo, useRef } from "react";
-import { Image, PanResponder, StyleSheet, Text, View } from "react-native";
+import { useEffect, useMemo, useRef } from "react";
+import { Animated, Image, PanResponder, StyleSheet, Text, View } from "react-native";
 
 import { getAsset } from "../assets/AssetRegistry";
 import { clampCamera, screenToWorld } from "../systems/CameraSystem";
@@ -128,7 +128,7 @@ export function GameCanvas({
         ))}
       </View>
       {phase === "playing" ? <MotherApproach level={level} remainingSeconds={remainingSeconds} /> : null}
-      {showInspection ? <Inspector level={level} /> : null}
+      {showInspection ? <InspectionCinematic level={level} /> : null}
     </View>
   );
 }
@@ -155,6 +155,69 @@ function RoomDressing() {
   );
 }
 
+const SPARKLE_COLORS = ["#ffd53d", "#ff3355", "#00c8b0", "#a78bfa", "#fb923c", "#34d399", "#f472b6"];
+const SPARKLE_COUNT = 8;
+
+function CleanedSparkle({ mess }: { mess: MessRuntimeState }) {
+  const anims = useRef(
+    Array.from({ length: SPARKLE_COUNT }, () => new Animated.Value(0))
+  ).current;
+
+  useEffect(() => {
+    Animated.stagger(
+      30,
+      anims.map((anim) =>
+        Animated.spring(anim, { toValue: 1, useNativeDriver: true, friction: 4, tension: 80 })
+      )
+    ).start();
+  }, [anims]);
+
+  const cx = mess.width / 2;
+  const cy = mess.height / 2;
+
+  return (
+    <View
+      style={[
+        styles.cleanedContainer,
+        { left: mess.x, top: mess.y, width: mess.width, height: mess.height }
+      ]}
+      pointerEvents="none"
+    >
+      {anims.map((anim, i) => {
+        const angle = (i / SPARKLE_COUNT) * Math.PI * 2;
+        const radius = 28 + (i % 3) * 14;
+        const tx = Math.cos(angle) * radius;
+        const ty = Math.sin(angle) * radius;
+        const color = SPARKLE_COLORS[i % SPARKLE_COLORS.length];
+        const size = 8 + (i % 3) * 4;
+
+        const translateX = anim.interpolate({ inputRange: [0, 1], outputRange: [0, tx] });
+        const translateY = anim.interpolate({ inputRange: [0, 1], outputRange: [0, ty] });
+        const opacity = anim.interpolate({ inputRange: [0, 0.6, 1], outputRange: [0, 1, 0.2] });
+        const scale = anim.interpolate({ inputRange: [0, 0.5, 1], outputRange: [0, 1.4, 0.8] });
+
+        return (
+          <Animated.View
+            key={i}
+            style={{
+              position: "absolute",
+              left: cx - size / 2,
+              top: cy - size / 2,
+              width: size,
+              height: size,
+              borderRadius: size / 2,
+              backgroundColor: color,
+              opacity,
+              transform: [{ translateX }, { translateY }, { scale }]
+            }}
+          />
+        );
+      })}
+      <Text style={styles.cleanedCheck}>✓</Text>
+    </View>
+  );
+}
+
 function MessView({
   mess,
   debugMode,
@@ -169,21 +232,7 @@ function MessView({
   const wrongTool = Date.now() < mess.wrongToolFlashUntil;
 
   if (mess.cleaned) {
-    return (
-      <View
-        style={[
-          styles.cleanedSparkle,
-          {
-            left: mess.x + mess.width * 0.25,
-            top: mess.y + mess.height * 0.25,
-            width: mess.width * 0.5,
-            height: mess.height * 0.5
-          }
-        ]}
-      >
-        <Text style={styles.cleanedText}>DONE</Text>
-      </View>
-    );
+    return <CleanedSparkle mess={mess} />;
   }
 
   return (
@@ -211,13 +260,47 @@ function MessView({
           <Text style={styles.messLabel}>{mess.label}</Text>
         </View>
       )}
-      {asset.image ? <Text style={styles.imageMessLabel}>{mess.label}</Text> : null}
       <View style={styles.progressTrack}>
         <View style={[styles.progressFill, { width: `${progress * 100}%` }]} />
       </View>
       {wrongTool ? <Text style={styles.wrongText}>wrong tool!</Text> : null}
       {showFlag ? <Text style={styles.flag}>!</Text> : null}
       {debugMode ? <Text style={styles.debugId}>{mess.id}</Text> : null}
+    </View>
+  );
+}
+
+function InspectionCinematic({ level }: { level: LevelDefinition }) {
+  const asset = getAsset(level.inspector.characterAssetKey);
+  const overlayAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(300)).current;
+  const bubbleAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.sequence([
+      Animated.timing(overlayAnim, { toValue: 1, duration: 280, useNativeDriver: true }),
+      Animated.parallel([
+        Animated.spring(slideAnim, { toValue: 0, friction: 7, tension: 60, useNativeDriver: true }),
+        Animated.timing(bubbleAnim, { toValue: 1, duration: 350, delay: 200, useNativeDriver: true })
+      ])
+    ]).start();
+  }, [overlayAnim, slideAnim, bubbleAnim]);
+
+  return (
+    <View style={StyleSheet.absoluteFill} pointerEvents="none">
+      <Animated.View style={[styles.inspectionOverlay, { opacity: overlayAnim }]} />
+      <Animated.View style={[styles.inspectorSlide, { transform: [{ translateX: slideAnim }] }]}>
+        {asset.image ? (
+          <Image source={asset.image} style={styles.inspectorImageLarge} resizeMode="contain" />
+        ) : (
+          <View style={[styles.inspectorBodyLarge, { backgroundColor: asset.accentColor }]}>
+            <Text style={styles.inspectorFallbackText}>{asset.placeholderText}</Text>
+          </View>
+        )}
+        <Animated.View style={[styles.scoldBubble, { opacity: bubbleAnim, transform: [{ scale: bubbleAnim }] }]}>
+          <Text style={styles.scoldText}>I can still see it.</Text>
+        </Animated.View>
+      </Animated.View>
     </View>
   );
 }
@@ -357,18 +440,6 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%"
   },
-  imageMessLabel: {
-    backgroundColor: "rgba(40,35,31,0.72)",
-    borderRadius: 6,
-    bottom: -16,
-    color: "#fffaf3",
-    fontSize: 10,
-    fontWeight: "900",
-    left: 8,
-    paddingHorizontal: 5,
-    paddingVertical: 2,
-    position: "absolute"
-  },
   messBlob: {
     alignItems: "center",
     justifyContent: "center"
@@ -448,19 +519,18 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: -22
   },
-  cleanedSparkle: {
+  cleanedContainer: {
+    position: "absolute",
     alignItems: "center",
-    backgroundColor: "rgba(255,255,255,0.68)",
-    borderColor: "#2bb3a3",
-    borderRadius: 8,
-    borderWidth: 2,
-    justifyContent: "center",
-    position: "absolute"
+    justifyContent: "center"
   },
-  cleanedText: {
-    color: "#24645d",
-    fontSize: 11,
-    fontWeight: "900"
+  cleanedCheck: {
+    color: "#00c8b0",
+    fontSize: 28,
+    fontWeight: "900",
+    textShadowColor: "rgba(0,200,176,0.5)",
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 8
   },
   inspector: {
     alignItems: "center",
@@ -485,17 +555,49 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: "900"
   },
+  inspectionOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(20,10,5,0.72)"
+  },
+  inspectorSlide: {
+    position: "absolute",
+    right: 0,
+    bottom: 0,
+    top: 0,
+    width: "68%",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    paddingBottom: 80
+  },
+  inspectorImageLarge: {
+    width: "100%",
+    height: "80%",
+    resizeMode: "contain"
+  },
+  inspectorBodyLarge: {
+    width: "80%",
+    height: "60%",
+    borderRadius: 16,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  inspectorFallbackText: {
+    color: "#28231f",
+    fontSize: 48,
+    fontWeight: "900"
+  },
   scoldBubble: {
     backgroundColor: "#fffaf3",
     borderColor: "#28231f",
-    borderRadius: 8,
+    borderRadius: 10,
     borderWidth: 3,
-    marginTop: 10,
-    padding: 10
+    marginTop: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 10
   },
   scoldText: {
     color: "#28231f",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "900"
   },
   motherApproach: {
