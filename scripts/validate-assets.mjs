@@ -18,15 +18,161 @@ const ROOT = join(__dirname, "..");
 // targetSize: [w, h] in pixels at 1× (game units)
 
 const ASSETS = [
-  // ── Room background ───────────────────────────────────────────────────────
+  // ════════════════════════════════════════════════════════════════════════
+  // ROOM 1: Trini's Room
+  // ════════════════════════════════════════════════════════════════════════
   {
-    key: "room_bedroom",
-    file: "rooms/bedroom-cartoon.png",
-    category: "Room",
+    key: "room_trinis_room_bg",
+    file: "rooms/trinis-room/background.png",
+    category: "Room 1 / Background",
     generated: true,
     priority: "high",
     targetSize: [980, 1480],
-    note: "Full room top-down — biggest visual impact",
+    note: "Trini's Room — full room top-down. Biggest visual impact.",
+    legacyFile: "rooms/bedroom-cartoon.png",   // current placeholder location
+  },
+  {
+    key: "room_trinis_room_bed_left",
+    file: "rooms/trinis-room/furniture/bed-left.png",
+    category: "Room 1 / Furniture",
+    generated: false,
+    priority: "low",
+    targetSize: [840, 640],
+    note: "Lavender single bed, top-down",
+  },
+  {
+    key: "room_trinis_room_bed_right",
+    file: "rooms/trinis-room/furniture/bed-right.png",
+    category: "Room 1 / Furniture",
+    generated: false,
+    priority: "low",
+    targetSize: [840, 640],
+    note: "Rose pink single bed, top-down",
+  },
+  {
+    key: "room_trinis_room_birdcage",
+    file: "rooms/trinis-room/furniture/birdcage.png",
+    category: "Room 1 / Furniture",
+    generated: false,
+    priority: "low",
+    targetSize: [360, 440],
+    note: "Birdcage with blue + grey parakeets",
+  },
+  {
+    key: "room_trinis_room_rug",
+    file: "rooms/trinis-room/furniture/rug.png",
+    category: "Room 1 / Furniture",
+    generated: false,
+    priority: "low",
+    targetSize: [1480, 960],
+    note: "Deep red oval rug",
+  },
+  {
+    key: "room_trinis_room_window",
+    file: "rooms/trinis-room/furniture/window.png",
+    category: "Room 1 / Furniture",
+    generated: false,
+    priority: "low",
+    targetSize: [440, 400],
+    note: "Window with white curtains",
+  },
+  {
+    key: "room_trinis_room_door",
+    file: "rooms/trinis-room/furniture/door.png",
+    category: "Room 1 / Furniture",
+    generated: false,
+    priority: "low",
+    targetSize: [360, 600],
+    note: "Wooden door, bottom of room",
+  },
+
+  // ════════════════════════════════════════════════════════════════════════
+  // ROOM 2: Kitchen (planned)
+  // ════════════════════════════════════════════════════════════════════════
+  {
+    key: "room_kitchen_bg",
+    file: "rooms/kitchen/background.png",
+    category: "Room 2 / Background",
+    generated: false,
+    priority: "medium",
+    targetSize: [980, 1480],
+    note: "Kitchen — white tile floor, blue cabinets, stove, sink, fridge",
+  },
+  {
+    key: "room_kitchen_stove",
+    file: "rooms/kitchen/furniture/stove.png",
+    category: "Room 2 / Furniture",
+    generated: false,
+    priority: "low",
+    targetSize: [400, 440],
+    note: "Stove top-down, 4 burners visible",
+  },
+  {
+    key: "room_kitchen_sink",
+    file: "rooms/kitchen/furniture/sink.png",
+    category: "Room 2 / Furniture",
+    generated: false,
+    priority: "low",
+    targetSize: [360, 280],
+    note: "Stainless sink top-down",
+  },
+  {
+    key: "room_kitchen_fridge",
+    file: "rooms/kitchen/furniture/fridge.png",
+    category: "Room 2 / Furniture",
+    generated: false,
+    priority: "low",
+    targetSize: [340, 500],
+    note: "Fridge top-down, white top panel",
+  },
+  {
+    key: "room_kitchen_table",
+    file: "rooms/kitchen/furniture/table.png",
+    category: "Room 2 / Furniture",
+    generated: false,
+    priority: "low",
+    targetSize: [480, 680],
+    note: "Round kitchen table + 4 chairs top-down",
+  },
+
+  // ════════════════════════════════════════════════════════════════════════
+  // ROOM 3: Living Room (planned)
+  // ════════════════════════════════════════════════════════════════════════
+  {
+    key: "room_living_room_bg",
+    file: "rooms/living-room/background.png",
+    category: "Room 3 / Background",
+    generated: false,
+    priority: "low",
+    targetSize: [980, 1480],
+    note: "Living room — beige carpet, blue sofa, TV unit, bookshelf",
+  },
+  {
+    key: "room_living_room_sofa",
+    file: "rooms/living-room/furniture/sofa.png",
+    category: "Room 3 / Furniture",
+    generated: false,
+    priority: "low",
+    targetSize: [700, 440],
+    note: "L-shaped sofa top-down, blue fabric",
+  },
+  {
+    key: "room_living_room_tv_unit",
+    file: "rooms/living-room/furniture/tv-unit.png",
+    category: "Room 3 / Furniture",
+    generated: false,
+    priority: "low",
+    targetSize: [560, 240],
+    note: "TV unit + flat screen from above",
+  },
+  {
+    key: "room_living_room_coffee_table",
+    file: "rooms/living-room/furniture/coffee-table.png",
+    category: "Room 3 / Furniture",
+    generated: false,
+    priority: "low",
+    targetSize: [400, 280],
+    note: "Low glass coffee table top-down",
   },
 
   // ── Mess items (vacuum) ──────────────────────────────────────────────────

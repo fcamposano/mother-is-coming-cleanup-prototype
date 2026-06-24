@@ -26,7 +26,7 @@ const INCOMING = join(ROOT, "assets/_incoming");
 
 // Target sizes per slot (matches ASSET_PIPELINE.md)
 const SLOT_SPECS = {
-  // Mess items
+  // ── Shared mess items ───────────────────────────────────────────────────
   mess_crumbs:          { dir: "messes", w: 440, h: 340 },
   mess_dust:            { dir: "messes", w: 440, h: 340 },
   mess_debris:          { dir: "messes", w: 440, h: 340 },
@@ -36,33 +36,53 @@ const SLOT_SPECS = {
   mess_clothes:         { dir: "messes", w: 440, h: 340 },
   mess_toys:            { dir: "messes", w: 440, h: 340 },
   mess_trash:           { dir: "messes", w: 440, h: 340 },
-  mess_ignacio_goop:    { dir: "messes", w: 440, h: 340 },
-  mess_ignacio_clothes: { dir: "messes", w: 440, h: 340 },
-  // Tools
+  mess_ignacio_goop:    { dir: "messes", w: 440, h: 340, file: "ignacio-goop.png" },
+  mess_ignacio_clothes: { dir: "messes", w: 440, h: 340, file: "ignacio-clothes.png" },
+  mess_grease:          { dir: "messes", w: 440, h: 340 },
+  mess_broken_egg:      { dir: "messes", w: 440, h: 340, file: "broken-egg.png" },
+  mess_vegetable_peel:  { dir: "messes", w: 440, h: 340, file: "vegetable-peel.png" },
+
+  // ── Shared tools ────────────────────────────────────────────────────────
   tool_vacuum:          { dir: "tools", w: 320, h: 320 },
   tool_mop:             { dir: "tools", w: 320, h: 320 },
   tool_hand:            { dir: "tools", w: 320, h: 320 },
-  // Room
-  room_bedroom:         { dir: "rooms", w: 980, h: 1480, file: "bedroom-cartoon.png" },
-  // Characters
-  character_mother_kiss:    { dir: "characters", w: 300, h: 500, file: "mother-kiss.png" },
-  character_mother_scream:  { dir: "characters", w: 300, h: 500, file: "mother-scream.png" },
-  character_mother_neutral: { dir: "characters", w: 600, h: 900, file: "mother-real.png" },
-  // Furniture
-  furniture_bed_left:   { dir: "rooms/furniture", w: 420, h: 320 },
-  furniture_bed_right:  { dir: "rooms/furniture", w: 420, h: 320 },
-  furniture_desk:       { dir: "rooms/furniture", w: 140, h: 230 },
-  furniture_dresser:    { dir: "rooms/furniture", w: 280, h: 220 },
-  furniture_birdcage:   { dir: "rooms/furniture", w: 180, h: 220 },
-  furniture_rug:        { dir: "rooms/furniture", w: 740, h: 480 },
-  furniture_window:     { dir: "rooms/furniture", w: 220, h: 200 },
-  furniture_door:       { dir: "rooms/furniture", w: 180, h: 300 },
-  // UI
-  ui_speech_bubble:     { dir: "ui", w: 400, h: 240 },
-  ui_star_full:         { dir: "ui", w: 120, h: 120 },
-  ui_star_empty:        { dir: "ui", w: 120, h: 120 },
-  ui_button_green:      { dir: "ui", w: 480, h: 140 },
-  ui_button_red:        { dir: "ui", w: 480, h: 140 },
+
+  // ── Shared characters ───────────────────────────────────────────────────
+  character_mother_kiss:    { dir: "characters", w: 600, h: 1000, file: "mother-kiss.png" },
+  character_mother_scream:  { dir: "characters", w: 600, h: 1000, file: "mother-scream.png" },
+  character_mother_neutral: { dir: "characters", w: 762, h: 1350, file: "mother-real.png" },
+
+  // ── Room 1: Trini's Room ────────────────────────────────────────────────
+  room_trinis_room_bg:          { dir: "rooms/trinis-room", w: 980, h: 1480, file: "background.png" },
+  room_trinis_room_bed_left:    { dir: "rooms/trinis-room/furniture", w: 840, h: 640, file: "bed-left.png" },
+  room_trinis_room_bed_right:   { dir: "rooms/trinis-room/furniture", w: 840, h: 640, file: "bed-right.png" },
+  room_trinis_room_desk:        { dir: "rooms/trinis-room/furniture", w: 280, h: 460, file: "desk.png" },
+  room_trinis_room_dresser:     { dir: "rooms/trinis-room/furniture", w: 560, h: 440, file: "dresser.png" },
+  room_trinis_room_birdcage:    { dir: "rooms/trinis-room/furniture", w: 360, h: 440, file: "birdcage.png" },
+  room_trinis_room_rug:         { dir: "rooms/trinis-room/furniture", w: 1480, h: 960, file: "rug.png" },
+  room_trinis_room_window:      { dir: "rooms/trinis-room/furniture", w: 440, h: 400, file: "window.png" },
+  room_trinis_room_door:        { dir: "rooms/trinis-room/furniture", w: 360, h: 600, file: "door.png" },
+
+  // ── Room 2: Kitchen ─────────────────────────────────────────────────────
+  room_kitchen_bg:      { dir: "rooms/kitchen", w: 980, h: 1480, file: "background.png" },
+  room_kitchen_stove:   { dir: "rooms/kitchen/furniture", w: 400, h: 440, file: "stove.png" },
+  room_kitchen_sink:    { dir: "rooms/kitchen/furniture", w: 360, h: 280, file: "sink.png" },
+  room_kitchen_fridge:  { dir: "rooms/kitchen/furniture", w: 340, h: 500, file: "fridge.png" },
+  room_kitchen_table:   { dir: "rooms/kitchen/furniture", w: 480, h: 680, file: "table.png" },
+
+  // ── Room 3: Living Room ─────────────────────────────────────────────────
+  room_living_room_bg:           { dir: "rooms/living-room", w: 980, h: 1480, file: "background.png" },
+  room_living_room_sofa:         { dir: "rooms/living-room/furniture", w: 700, h: 440, file: "sofa.png" },
+  room_living_room_tv_unit:      { dir: "rooms/living-room/furniture", w: 560, h: 240, file: "tv-unit.png" },
+  room_living_room_coffee_table: { dir: "rooms/living-room/furniture", w: 400, h: 280, file: "coffee-table.png" },
+  room_living_room_bookshelf:    { dir: "rooms/living-room/furniture", w: 200, h: 480, file: "bookshelf.png" },
+
+  // ── UI ──────────────────────────────────────────────────────────────────
+  ui_speech_bubble: { dir: "ui", w: 400, h: 240, file: "speech-bubble.png" },
+  ui_star_full:     { dir: "ui", w: 120, h: 120, file: "star-full.png" },
+  ui_star_empty:    { dir: "ui", w: 120, h: 120, file: "star-empty.png" },
+  ui_button_green:  { dir: "ui", w: 480, h: 140, file: "button-green.png" },
+  ui_button_red:    { dir: "ui", w: 480, h: 140, file: "button-red.png" },
 };
 
 const RESET  = "\x1b[0m";
