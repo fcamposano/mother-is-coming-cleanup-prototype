@@ -117,7 +117,7 @@ function WinModal({ score, cleanedCount, onRetry }: { score: number; cleanedCoun
             ? <Image source={kissAsset.image} style={styles.characterImg} resizeMode="contain" />
             : <Text style={styles.characterFallback}>{kissAsset.placeholderText}</Text>}
           <View style={styles.speechBubble}>
-            <Text style={styles.speechText}>¡Mwah! 💋{"\n"}Mi amor, the floor{"\n"}SHINES! 🌟</Text>
+            <Text style={styles.speechText}>¡Mwah! 💋{"\n"}Está todo limpio...{"\n"}que sorpresa! 🌟</Text>
             <View style={styles.speechTail} />
           </View>
         </View>
@@ -202,7 +202,7 @@ function LoseModal({ missedCount, missedLabels, score, onRetry }: { missedCount:
             ? <Image source={screamAsset.image} style={styles.characterImg} resizeMode="contain" />
             : <Text style={styles.characterFallback}>{screamAsset.placeholderText}</Text>}
           <View style={[styles.speechBubble, styles.speechBubbleScream]}>
-            <Text style={[styles.speechText, styles.speechTextScream]}>I can SMELL{"\n"}the chaos!!!{"\n"}😱😱😱</Text>
+            <Text style={[styles.speechText, styles.speechTextScream]}>Está todo sucio,{"\n"}tengo que hacer{"\n"}todo yo!!!!!! 😱😱😱</Text>
             <View style={[styles.speechTail, styles.speechTailScream]} />
           </View>
         </Animated.View>
