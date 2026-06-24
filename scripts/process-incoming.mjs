@@ -145,6 +145,7 @@ async function validateAndResize(src, dest, spec, key) {
   writeFileSync(scriptPath, `
 import sys
 from PIL import Image
+import numpy as np
 
 src = sys.argv[1]
 dest = sys.argv[2]
@@ -155,6 +156,16 @@ tolerance = 0.25
 img = Image.open(src)
 print(f"INPUT: {img.size[0]}x{img.size[1]} {img.mode}")
 img = img.convert("RGBA")
+
+# Check if background needs removal (< 5% transparent pixels = fully opaque source)
+arr = __import__("numpy").array(img)
+transparent_ratio = (arr[:,:,3] == 0).sum() / arr[:,:,3].size
+if transparent_ratio < 0.05:
+    print("REMBG: removing background...")
+    from rembg import remove
+    img = remove(img)
+    print("REMBG: done")
+
 w, h = img.size
 if (abs(w - target_w) / target_w > tolerance) or (abs(h - target_h) / target_h > tolerance):
     print(f"RESIZE: {w}x{h} -> {target_w}x{target_h}")
