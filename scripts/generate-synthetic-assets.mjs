@@ -1,6 +1,20 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { PNG } from "pngjs";
+
+// Skip writing a file if a real asset already exists there (> 15 KB = not a placeholder)
+function shouldSkip(path) {
+  if (!existsSync(path)) return false;
+  return statSync(path).size > 15_000;
+}
+
+function savePng(path, png) {
+  if (shouldSkip(path)) {
+    console.log(`  skip (real asset): ${path.split("/assets/")[1]}`);
+    return;
+  }
+  writeFileSync(path, PNG.sync.write(png));
+}
 
 const root = process.cwd();
 const dirs = {
@@ -152,7 +166,7 @@ function writePng(width, height, filePath, draw) {
     for (let x = 0; x < width; x += 1) set(image, x, y, 0, 0, 0, 0);
   }
   draw(image);
-  writeFileSync(filePath, PNG.sync.write(image));
+  savePng(filePath, image);
 }
 
 writePng(980, 1480, join(dirs.rooms, "bedroom-cartoon.png"), (image) => {
