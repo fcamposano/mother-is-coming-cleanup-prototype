@@ -7,7 +7,7 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     label: "Bedroom",
     color: "#f8efe0",
     accentColor: "#5b8f8f",
-    image: require("../../../assets/rooms/bedroom-cartoon.png")
+    image: require("../../../assets/rooms/trinis-room/background.png")
   },
   mess_crumbs: {
     key: "mess_crumbs",
