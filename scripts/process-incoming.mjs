@@ -138,7 +138,11 @@ async function processFile(filename) {
 }
 
 async function validateAndResize(src, dest, spec, key) {
-  const script = `
+  const { writeFileSync, unlinkSync } = await import("fs");
+  const { tmpdir } = await import("os");
+
+  const scriptPath = join(tmpdir(), "process_asset.py");
+  writeFileSync(scriptPath, `
 import sys
 from PIL import Image
 
@@ -146,35 +150,30 @@ src = sys.argv[1]
 dest = sys.argv[2]
 target_w = int(sys.argv[3])
 target_h = int(sys.argv[4])
-tolerance = 0.25  # 25% size tolerance before forcing resize
+tolerance = 0.25
 
 img = Image.open(src)
 print(f"INPUT: {img.size[0]}x{img.size[1]} {img.mode}")
-
-# Convert to RGBA (ensures transparency support)
 img = img.convert("RGBA")
-
 w, h = img.size
-# Check if resize is needed
-needs_resize = (abs(w - target_w) / target_w > tolerance) or (abs(h - target_h) / target_h > tolerance)
-
-if needs_resize:
+if (abs(w - target_w) / target_w > tolerance) or (abs(h - target_h) / target_h > tolerance):
     print(f"RESIZE: {w}x{h} -> {target_w}x{target_h}")
     img = img.resize((target_w, target_h), Image.LANCZOS)
-
 img.save(dest, optimize=True)
 print(f"SAVED: {img.size[0]}x{img.size[1]}")
-`;
+`);
 
   try {
     const result = execSync(
-      `python3 -c ${JSON.stringify(script)} "${src}" "${dest}" ${spec.w} ${spec.h}`,
+      `python3 "${scriptPath}" "${src}" "${dest}" ${spec.w} ${spec.h}`,
       { encoding: "utf8" }
     );
     result.trim().split("\n").forEach(line => console.log(`   ${line}`));
+    unlinkSync(scriptPath);
     return true;
   } catch (err) {
     console.log(`${RED}❌ Failed to process: ${err.message}${RESET}`);
+    try { unlinkSync(scriptPath); } catch {}
     return false;
   }
 }
