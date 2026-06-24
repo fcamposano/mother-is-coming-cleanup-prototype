@@ -3,6 +3,7 @@ import { create } from "zustand";
 import { levelBedroom } from "../levels/levelBedroom";
 import { clampCamera } from "../systems/CameraSystem";
 import { applyCleaningStroke, createRuntimeMesses } from "../systems/CleaningSystem";
+import { randomizePositions } from "../systems/PositionRandomizer";
 import { getCleanedCount, getMissedCount, getWinBonus } from "../systems/ScoringSystem";
 import { Camera, GamePhase, LevelDefinition, MessRuntimeState, ToolType } from "../types/gameTypes";
 
@@ -30,7 +31,7 @@ type GameStore = {
   retry: () => void;
 };
 
-const initialMesses = () => createRuntimeMesses(levelBedroom.messItems);
+const initialMesses = () => createRuntimeMesses(randomizePositions(levelBedroom.messItems));
 
 const SURPRISE_MESSES = [
   {
