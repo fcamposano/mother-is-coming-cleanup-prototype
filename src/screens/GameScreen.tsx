@@ -12,7 +12,7 @@ import { playSound, setMusicRate, startMusic, stopMusic } from "../game/systems/
 import { triggerHaptic } from "../game/systems/HapticsSystem";
 import { selectCleanedCount, selectMissedCount, useGameStore } from "../game/state/gameStore";
 
-export function GameScreen() {
+export function GameScreen({ onExit }: { onExit?: () => void }) {
   const level = useGameStore((state) => state.level);
   const messes = useGameStore((state) => state.messes);
   const selectedTool = useGameStore((state) => state.selectedTool);
@@ -271,6 +271,11 @@ export function GameScreen() {
           <View style={styles.topHud} pointerEvents="box-none">
             <TimerBar remainingSeconds={remainingSeconds} totalSeconds={level.timeLimitSeconds} />
             <View style={styles.titleRow}>
+              {onExit && (
+                <Pressable onPress={onExit} style={styles.homeButton}>
+                  <Text style={styles.homeButtonText}>🏠</Text>
+                </Pressable>
+              )}
               <Text style={styles.title}>{level.title}</Text>
               <Pressable onPress={toggleDebugMode} style={[styles.debugButton, debugMode && styles.debugButtonOn]}>
                 <Text style={styles.debugButtonText}>DBG</Text>
@@ -350,6 +355,7 @@ export function GameScreen() {
             missedLabels={missedLabels}
             score={score}
             onRetry={retry}
+            onHome={onExit}
           />
         </Animated.View>
       </SafeAreaView>
@@ -390,6 +396,20 @@ const styles = StyleSheet.create({
   vignette: {
     backgroundColor: "#ff1744",
     pointerEvents: "none"
+  },
+  homeButton: {
+    alignItems: "center",
+    backgroundColor: "rgba(255,250,243,0.85)",
+    borderColor: "#28231f",
+    borderRadius: 8,
+    borderWidth: 2,
+    height: 36,
+    justifyContent: "center",
+    marginRight: 8,
+    width: 40
+  },
+  homeButtonText: {
+    fontSize: 18
   },
   debugButton: {
     alignItems: "center",

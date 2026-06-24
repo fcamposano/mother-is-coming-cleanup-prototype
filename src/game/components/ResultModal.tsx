@@ -12,15 +12,16 @@ type ResultModalProps = {
   missedLabels: string[];
   score: number;
   onRetry: () => void;
+  onHome?: () => void;
 };
 
-export function ResultModal({ visible, won, cleanedCount, missedCount, missedLabels, score, onRetry }: ResultModalProps) {
+export function ResultModal({ visible, won, cleanedCount, missedCount, missedLabels, score, onRetry, onHome }: ResultModalProps) {
   if (!visible) return null;
-  if (won) return <WinModal score={score} cleanedCount={cleanedCount} onRetry={onRetry} />;
-  return <LoseModal missedCount={missedCount} missedLabels={missedLabels} score={score} onRetry={onRetry} />;
+  if (won) return <WinModal score={score} cleanedCount={cleanedCount} onRetry={onRetry} onHome={onHome} />;
+  return <LoseModal missedCount={missedCount} missedLabels={missedLabels} score={score} onRetry={onRetry} onHome={onHome} />;
 }
 
-function WinModal({ score, cleanedCount, onRetry }: { score: number; cleanedCount: number; onRetry: () => void }) {
+function WinModal({ score, cleanedCount, onRetry, onHome }: { score: number; cleanedCount: number; onRetry: () => void; onHome?: () => void }) {
   const [name, setName] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [board, setBoard] = useState<LeaderboardEntry[]>([]);
@@ -180,15 +181,22 @@ function WinModal({ score, cleanedCount, onRetry }: { score: number; cleanedCoun
           </View>
         )}
 
-        <Pressable onPress={onRetry} style={styles.retry}>
-          <Text style={styles.retryText}>Play again 🧹</Text>
-        </Pressable>
+        <View style={styles.retryRow}>
+          <Pressable onPress={onRetry} style={styles.retry}>
+            <Text style={styles.retryText}>Play again 🧹</Text>
+          </Pressable>
+          {onHome && (
+            <Pressable onPress={onHome} style={styles.homeBtn}>
+              <Text style={styles.homeBtnText}>🏠 Home</Text>
+            </Pressable>
+          )}
+        </View>
       </Animated.View>
     </Animated.View>
   );
 }
 
-function LoseModal({ missedCount, missedLabels, score, onRetry }: { missedCount: number; missedLabels: string[]; score: number; onRetry: () => void }) {
+function LoseModal({ missedCount, missedLabels, score, onRetry, onHome }: { missedCount: number; missedLabels: string[]; score: number; onRetry: () => void; onHome?: () => void }) {
   const screamAsset = getAsset("character_mother_placeholder");
   const shakeAnim = useRef(new Animated.Value(0)).current;
 
@@ -228,9 +236,16 @@ function LoseModal({ missedCount, missedLabels, score, onRetry }: { missedCount:
             <Text style={styles.missedText}>{missedLabels.join(", ")}</Text>
           </View>
         )}
-        <Pressable onPress={onRetry} style={styles.retry}>
-          <Text style={styles.retryText}>Retry panic clean 🧹</Text>
-        </Pressable>
+        <View style={styles.retryRow}>
+          <Pressable onPress={onRetry} style={styles.retry}>
+            <Text style={styles.retryText}>Retry panic clean 🧹</Text>
+          </Pressable>
+          {onHome && (
+            <Pressable onPress={onHome} style={styles.homeBtn}>
+              <Text style={styles.homeBtnText}>🏠 Home</Text>
+            </Pressable>
+          )}
+        </View>
       </View>
     </View>
   );
@@ -492,16 +507,33 @@ const styles = StyleSheet.create({
   },
 
   // Shared
+  retryRow: {
+    flexDirection: "row",
+    gap: 10,
+    marginTop: 16
+  },
   retry: {
     alignItems: "center",
     backgroundColor: "#28231f",
     borderRadius: 8,
-    marginTop: 16,
+    flex: 1,
     padding: 14
   },
   retryText: {
     color: "#fffaf3",
     fontSize: 15,
     fontWeight: "900"
+  },
+  homeBtn: {
+    alignItems: "center",
+    backgroundColor: "#5b8f8f",
+    borderRadius: 8,
+    justifyContent: "center",
+    padding: 14
+  },
+  homeBtnText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "700"
   }
 });
