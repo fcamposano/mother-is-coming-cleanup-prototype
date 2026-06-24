@@ -1,5 +1,9 @@
 import { Camera } from "../types/gameTypes";
 
+// Extra scroll allowance so the bottom HUD doesn't hide the last section of the room.
+// Must match the actual rendered height of the bottom tool bar in GameScreen.
+export const BOTTOM_HUD_HEIGHT = 130;
+
 export function clampCamera(
   camera: Camera,
   viewportWidth: number,
@@ -9,7 +13,7 @@ export function clampCamera(
 ): Camera {
   return {
     x: clamp(camera.x, 0, Math.max(0, worldWidth - viewportWidth)),
-    y: clamp(camera.y, 0, Math.max(0, worldHeight - viewportHeight))
+    y: clamp(camera.y, 0, Math.max(0, worldHeight - viewportHeight + BOTTOM_HUD_HEIGHT))
   };
 }
 
