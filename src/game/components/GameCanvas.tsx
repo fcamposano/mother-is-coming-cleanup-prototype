@@ -256,7 +256,7 @@ function MessView({
       ]}
     >
       {asset.image ? (
-        <Image source={asset.image} style={[styles.messImage, { opacity: 1 - progress * 0.72 }]} resizeMode="contain" />
+        <Image source={asset.image} style={[styles.messImage, { opacity: 1 - progress * 0.72 }]} resizeMode="stretch" />
       ) : (
         <View style={styles.messBlob}>
           <Text style={styles.messText}>{asset.placeholderText}</Text>
@@ -444,10 +444,14 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     borderColor: "transparent",
     borderWidth: 0,
-    overflow: "visible"
+    overflow: "visible",
+    padding: 0
   },
   messImage: {
     height: "100%",
+    left: 0,
+    position: "absolute",
+    top: 0,
     width: "100%"
   },
   messBlob: {
