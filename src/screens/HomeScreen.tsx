@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Animated, Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { AssetRegistry } from "../game/assets/AssetRegistry";
-
+import { unlockAudio } from "../game/systems/AudioSystem";
 import { getLeaderboard, LeaderboardEntry } from "../game/services/LeaderboardService";
 
 type Room = {
@@ -126,7 +126,11 @@ export function HomeScreen({ onStartRoom }: Props) {
         <Text style={styles.sectionLabel}>Choose a Room</Text>
         <View style={styles.roomGrid}>
           {ROOMS.map((room) => (
-            <RoomCard key={room.id} room={room} onPress={() => room.available && onStartRoom(room.id)} />
+            <RoomCard key={room.id} room={room} onPress={() => {
+              if (!room.available) return;
+              void unlockAudio();
+              onStartRoom(room.id);
+            }} />
           ))}
         </View>
 
