@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Animated, Image, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Animated, Easing, Image, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { DebugOverlay } from "../game/components/DebugOverlay";
@@ -44,6 +44,11 @@ export function GameScreen() {
   const [showIgnacio, setShowIgnacio] = useState(false);
   const ignacioSlide = useRef(new Animated.Value(-320)).current;
   const ignacioOpacity = useRef(new Animated.Value(0)).current;
+  const [projectiles, setProjectiles] = useState<Array<{
+    id: string; emoji: string;
+    x: Animated.Value; y: Animated.Value;
+    scale: Animated.Value; opacity: Animated.Value;
+  }>>([]);
 
   useEffect(() => {
     let last = Date.now();
@@ -123,7 +128,58 @@ export function GameScreen() {
         Animated.timing(ignacioOpacity, { toValue: 0, duration: 350, useNativeDriver: true })
       ])
     ]).start(() => setShowIgnacio(false));
-  }, [surpriseTriggered, ignacioSlide, ignacioOpacity]);
+
+    // Origin: centre of Ignacio's image on screen (left:16 + half of 180px wide, bottom:90 + half of 240px tall)
+    const originX = 16 + 90;
+    const originY = viewport.height - 90 - 120;
+
+    // World positions of the two surprise messes (from gameStore SURPRISE_MESSES)
+    const targets = [
+      { id: "clothes", emoji: "👕", worldX: 600, worldY: 540 },
+      { id: "sticky",  emoji: "🍯", worldX: 260, worldY: 660 },
+    ];
+
+    const launchTimer = setTimeout(() => {
+      targets.forEach(({ id, emoji, worldX, worldY }, i) => {
+        const throwTimer = setTimeout(() => {
+          const destX = worldX - camera.x;
+          const destY = worldY - camera.y;
+
+          const x       = new Animated.Value(originX);
+          const y       = new Animated.Value(originY);
+          const scale   = new Animated.Value(0);
+          const opacity = new Animated.Value(0);
+
+          setProjectiles(prev => [...prev, { id, emoji, x, y, scale, opacity }]);
+
+          // Pop in
+          Animated.parallel([
+            Animated.timing(opacity, { toValue: 1, duration: 120, useNativeDriver: true }),
+            Animated.spring(scale, { toValue: 1.5, friction: 4, tension: 200, useNativeDriver: true }),
+          ]).start(() => {
+            // Fly: arc via midpoint — move X linearly, Y goes up then curves down
+            const arcY = Math.min(originY, destY) - 120;
+            Animated.parallel([
+              Animated.timing(x, { toValue: destX, duration: 600, easing: Easing.out(Easing.quad), useNativeDriver: true }),
+              Animated.sequence([
+                Animated.timing(y, { toValue: arcY,  duration: 220, easing: Easing.out(Easing.quad), useNativeDriver: true }),
+                Animated.timing(y, { toValue: destY, duration: 380, easing: Easing.in(Easing.quad),  useNativeDriver: true }),
+              ]),
+              Animated.timing(scale, { toValue: 0.7, duration: 600, useNativeDriver: true }),
+            ]).start(() => {
+              // Poof on landing
+              Animated.timing(opacity, { toValue: 0, duration: 180, useNativeDriver: true })
+                .start(() => setProjectiles(prev => prev.filter(p => p.id !== id)));
+            });
+          });
+        }, i * 250);
+
+        return () => clearTimeout(throwTimer);
+      });
+    }, 650);
+
+    return () => clearTimeout(launchTimer);
+  }, [surpriseTriggered, ignacioSlide, ignacioOpacity, camera, viewport]);
 
   useEffect(() => {
     if (phase === "playing") surpriseShownRef.current = false;
@@ -216,6 +272,22 @@ export function GameScreen() {
             pointerEvents="none"
             style={[StyleSheet.absoluteFill, styles.vignette, { opacity: vignetteAnim }]}
           />
+
+          {projectiles.map((p) => (
+            <Animated.View
+              key={p.id}
+              pointerEvents="none"
+              style={{
+                left: 0,
+                opacity: p.opacity,
+                position: "absolute",
+                top: 0,
+                transform: [{ translateX: p.x }, { translateY: p.y }, { scale: p.scale }],
+              }}
+            >
+              <Text style={styles.projectileEmoji}>{p.emoji}</Text>
+            </Animated.View>
+          ))}
 
           {showIgnacio && (
             <Animated.View
@@ -352,6 +424,9 @@ const styles = StyleSheet.create({
     color: "#24645d",
     fontSize: 14,
     fontWeight: "900"
+  },
+  projectileEmoji: {
+    fontSize: 34,
   },
   ignacioOverlay: {
     alignItems: "flex-end",
