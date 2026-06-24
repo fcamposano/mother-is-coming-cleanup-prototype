@@ -25,7 +25,8 @@ function WinModal({ score, cleanedCount, onRetry }: { score: number; cleanedCoun
   const [submitted, setSubmitted] = useState(false);
   const [board, setBoard] = useState<LeaderboardEntry[]>([]);
   const [newRank, setNewRank] = useState<number | null>(null);
-  const [doesQualify] = useState(() => qualifies(score));
+  const [doesQualify, setDoesQualify] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const slideAnim = useRef(new Animated.Value(60)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -61,16 +62,22 @@ function WinModal({ score, cleanedCount, onRetry }: { score: number; cleanedCoun
       });
     });
 
-    if (!doesQualify) {
-      setBoard(getLeaderboard());
-    }
+    void (async () => {
+      const q = await qualifies(score);
+      setDoesQualify(q);
+      if (!q) {
+        const b = await getLeaderboard();
+        setBoard(b);
+      }
+      setLoading(false);
+    })();
   }, []);
 
   const CONFETTI_COLORS = ["#ffd53d", "#ff3355", "#00c8b0", "#a78bfa", "#fb923c", "#34d399", "#f472b6", "#60a5fa"];
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const trimmed = name.trim() || "Anonymous";
-    const result = addEntry(trimmed, score);
+    const result = await addEntry(trimmed, score);
     setBoard(result.board);
     setNewRank(result.rank);
     setSubmitted(true);
@@ -124,7 +131,11 @@ function WinModal({ score, cleanedCount, onRetry }: { score: number; cleanedCoun
         <Text style={styles.winTitle}>Room survived!</Text>
         <Text style={styles.winSub}>Cleaned {cleanedCount} messes · Score {score}</Text>
 
-        {!submitted && doesQualify && (
+        {loading && (
+          <Text style={styles.noQualify}>Cargando tabla de puntajes…</Text>
+        )}
+
+        {!loading && !submitted && doesQualify && (
           <View style={styles.nameSection}>
             <Text style={styles.namePrompt}>🏆 You made the top 10! Enter your name:</Text>
             <TextInput
@@ -134,20 +145,20 @@ function WinModal({ score, cleanedCount, onRetry }: { score: number; cleanedCoun
               placeholder="Your name…"
               placeholderTextColor="#a09080"
               maxLength={20}
-              onSubmitEditing={handleSubmit}
+              onSubmitEditing={() => void handleSubmit()}
               autoFocus
             />
-            <Pressable style={styles.submitBtn} onPress={handleSubmit}>
+            <Pressable style={styles.submitBtn} onPress={() => void handleSubmit()}>
               <Text style={styles.submitBtnText}>Add to leaderboard →</Text>
             </Pressable>
           </View>
         )}
 
-        {!submitted && !doesQualify && (
+        {!loading && !submitted && doesQualify === false && (
           <Text style={styles.noQualify}>Not quite top 10 this time — keep practising!</Text>
         )}
 
-        {(submitted || !doesQualify) && board.length > 0 && (
+        {!loading && (submitted || doesQualify === false) && board.length > 0 && (
           <View style={styles.leaderboard}>
             <Text style={styles.leaderboardTitle}>🏅 Trini's Room — Top 10</Text>
             {newRank !== null && (
