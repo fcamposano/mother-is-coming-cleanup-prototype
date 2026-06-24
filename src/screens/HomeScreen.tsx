@@ -38,10 +38,11 @@ const ROOMS: Room[] = [
     available: false
   },
   {
-    id: "living-room",
-    title: "Living Room",
+    id: "isis-room",
+    title: "Isi's Room",
     subtitle: "Coming soon",
-    emoji: "🛋️",
+    emoji: "🛏️",
+    icon: AssetRegistry.room_isis_room_icon.image,
     color: "#4a72d9",
     accentColor: "#eef2ff",
     available: false

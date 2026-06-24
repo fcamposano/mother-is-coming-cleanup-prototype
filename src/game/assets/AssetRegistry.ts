@@ -17,6 +17,14 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     accentColor: "#f8efe0",
     image: require("../../../assets/rooms/trinis-room/icon.png")
   },
+  room_isis_room_icon: {
+    key: "room_isis_room_icon",
+    kind: "room",
+    label: "Isi's Room Icon",
+    color: "#4a72d9",
+    accentColor: "#eef2ff",
+    image: require("../../../assets/rooms/isis-room/icon.png")
+  },
   room_felipes_room_icon: {
     key: "room_felipes_room_icon",
     kind: "room",
