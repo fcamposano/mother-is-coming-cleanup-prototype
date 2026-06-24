@@ -99,6 +99,15 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     accentColor: "#ff5b6e",
     image: require("../../../assets/characters/mother-real.png")
   },
+  character_ignacio: {
+    key: "character_ignacio",
+    kind: "character",
+    label: "Ignacio",
+    placeholderText: "😈",
+    color: "#3a5a7a",
+    accentColor: "#90c0e0",
+    image: require("../../../assets/characters/ignacio.png")
+  },
   character_mother_kiss: {
     key: "character_mother_kiss",
     kind: "character",

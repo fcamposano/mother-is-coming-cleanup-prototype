@@ -250,16 +250,16 @@ writePng(980, 1480, join(dirs.rooms, "bedroom-cartoon.png"), (image) => {
   }
   // Dome highlight
   ellipse(image, 155, 422, 46, 16, "#d8e8d888");
-  // Parakeet 1 — green
-  ellipse(image, 140, 440, 13, 9, "#2eaa52");
-  ellipse(image, 134, 437, 7, 5, "#52cc72");
-  ellipse(image, 147, 434, 5, 4, "#1e7a38");
+  // Parakeet 1 — blue
+  ellipse(image, 140, 440, 13, 9, "#2a82d4");
+  ellipse(image, 134, 437, 7, 5, "#5ab4f4");
+  ellipse(image, 147, 434, 5, 4, "#1a5ca0");
   ellipse(image, 149, 433, 2, 2, "#101010");
   ellipse(image, 150, 434, 1, 1, "#f0c020");
-  // Parakeet 2 — blue/yellow
-  ellipse(image, 169, 444, 12, 9, "#2a82d4");
-  ellipse(image, 175, 441, 7, 5, "#5ab4f4");
-  ellipse(image, 161, 439, 5, 4, "#1a5ca0");
+  // Parakeet 2 — grey
+  ellipse(image, 169, 444, 12, 9, "#8a9aaa");
+  ellipse(image, 175, 441, 7, 5, "#b4c4d4");
+  ellipse(image, 161, 439, 5, 4, "#5a6a7a");
   ellipse(image, 159, 438, 2, 2, "#101010");
   ellipse(image, 158, 439, 1, 1, "#f0c020");
 

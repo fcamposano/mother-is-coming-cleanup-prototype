@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef } from "react";
-import { Animated, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Animated, Image, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { DebugOverlay } from "../game/components/DebugOverlay";
@@ -7,6 +7,7 @@ import { GameCanvas } from "../game/components/GameCanvas";
 import { ResultModal } from "../game/components/ResultModal";
 import { TimerBar } from "../game/components/TimerBar";
 import { ToolSelector } from "../game/components/ToolSelector";
+import { AssetRegistry } from "../game/assets/AssetRegistry";
 import { playSound, startMusic, stopMusic } from "../game/systems/AudioSystem";
 import { triggerHaptic } from "../game/systems/HapticsSystem";
 import { selectCleanedCount, selectMissedCount, useGameStore } from "../game/state/gameStore";
@@ -38,6 +39,11 @@ export function GameScreen() {
   const vignetteLoopRef = useRef<Animated.CompositeAnimation | null>(null);
   const shakeAnim = useRef(new Animated.Value(0)).current;
   const shakeTriggeredRef = useRef(false);
+  const surpriseTriggered = useGameStore((state) => state.surpriseTriggered);
+  const surpriseShownRef = useRef(false);
+  const [showIgnacio, setShowIgnacio] = useState(false);
+  const ignacioSlide = useRef(new Animated.Value(-320)).current;
+  const ignacioOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     let last = Date.now();
@@ -94,6 +100,34 @@ export function GameScreen() {
       ]).start();
     }
   }, [phase, remainingSeconds, vignetteAnim, shakeAnim]);
+
+  useEffect(() => {
+    if (!surpriseTriggered || surpriseShownRef.current) return;
+    surpriseShownRef.current = true;
+
+    setShowIgnacio(true);
+    playSound("wrongTool");
+    triggerHaptic("warning");
+
+    ignacioSlide.setValue(-320);
+    ignacioOpacity.setValue(0);
+
+    Animated.sequence([
+      Animated.parallel([
+        Animated.spring(ignacioSlide, { toValue: 0, friction: 6, tension: 80, useNativeDriver: true }),
+        Animated.timing(ignacioOpacity, { toValue: 1, duration: 300, useNativeDriver: true })
+      ]),
+      Animated.delay(2200),
+      Animated.parallel([
+        Animated.timing(ignacioSlide, { toValue: -320, duration: 350, useNativeDriver: true }),
+        Animated.timing(ignacioOpacity, { toValue: 0, duration: 350, useNativeDriver: true })
+      ])
+    ]).start(() => setShowIgnacio(false));
+  }, [surpriseTriggered, ignacioSlide, ignacioOpacity]);
+
+  useEffect(() => {
+    if (phase === "playing") surpriseShownRef.current = false;
+  }, [phase]);
 
   useEffect(() => {
     if (phase === "inspection" && !inspectionPlayedRef.current) {
@@ -182,6 +216,22 @@ export function GameScreen() {
             pointerEvents="none"
             style={[StyleSheet.absoluteFill, styles.vignette, { opacity: vignetteAnim }]}
           />
+
+          {showIgnacio && (
+            <Animated.View
+              pointerEvents="none"
+              style={[styles.ignacioOverlay, { opacity: ignacioOpacity, transform: [{ translateX: ignacioSlide }] }]}
+            >
+              <Image
+                source={AssetRegistry.character_ignacio.image}
+                style={styles.ignacioImg}
+                resizeMode="contain"
+              />
+              <View style={styles.ignacioSpeech}>
+                <Text style={styles.ignacioSpeechText}>¡Je je je! 😈{"\n"}¡Buena suerte{"\n"}limpiando!</Text>
+              </View>
+            </Animated.View>
+          )}
 
           {debugMode ? (
             <DebugOverlay
@@ -302,5 +352,31 @@ const styles = StyleSheet.create({
     color: "#24645d",
     fontSize: 14,
     fontWeight: "900"
+  },
+  ignacioOverlay: {
+    alignItems: "flex-end",
+    bottom: 90,
+    flexDirection: "row",
+    left: 16,
+    position: "absolute"
+  },
+  ignacioImg: {
+    height: 240,
+    width: 180
+  },
+  ignacioSpeech: {
+    backgroundColor: "#fff",
+    borderColor: "#28231f",
+    borderRadius: 16,
+    borderWidth: 3,
+    marginBottom: 60,
+    marginLeft: 8,
+    padding: 12
+  },
+  ignacioSpeechText: {
+    color: "#28231f",
+    fontSize: 15,
+    fontWeight: "900",
+    lineHeight: 22
   }
 });

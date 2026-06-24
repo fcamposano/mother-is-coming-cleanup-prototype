@@ -17,6 +17,8 @@ type GameStore = {
   score: number;
   debugMode: boolean;
   inspectionStartedAt?: number;
+  surpriseTriggered: boolean;
+  surpriseTriggerAt: number;
   setViewport: (width: number, height: number) => void;
   setSelectedTool: (tool: ToolType) => void;
   setCamera: (camera: Camera) => void;
@@ -30,6 +32,34 @@ type GameStore = {
 
 const initialMesses = () => createRuntimeMesses(levelBedroom.messItems);
 
+const SURPRISE_MESSES = [
+  {
+    id: "ignacio-sticky",
+    label: "Ignacio's Goop",
+    messType: "wet_spill" as const,
+    requiredTool: "mop" as const,
+    x: 260, y: 660, width: 160, height: 110,
+    assetKey: "mess_sticky",
+    cleanProgressRequired: 100,
+    scoreValue: 140,
+    roomAssociation: "floor"
+  },
+  {
+    id: "ignacio-clothes",
+    label: "Ignacio's Clothes",
+    messType: "pickup" as const,
+    requiredTool: "hand" as const,
+    x: 600, y: 540, width: 170, height: 130,
+    assetKey: "mess_clothes",
+    cleanProgressRequired: 80,
+    scoreValue: 120,
+    roomAssociation: "floor"
+  }
+];
+
+// Random trigger between 15–19 seconds remaining
+const randomSurpriseTrigger = () => 15 + Math.floor(Math.random() * 5);
+
 export const useGameStore = create<GameStore>((set, get) => ({
   level: levelBedroom,
   messes: initialMesses(),
@@ -40,6 +70,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   phase: "playing",
   score: 0,
   debugMode: false,
+  surpriseTriggered: false,
+  surpriseTriggerAt: randomSurpriseTrigger(),
   setViewport: (width, height) =>
     set((state) => ({
       viewport: { width, height },
@@ -59,6 +91,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (remainingSeconds <= 0) {
       set({ remainingSeconds: 0, phase: "inspection", inspectionStartedAt: Date.now() });
       return;
+    }
+
+    if (!state.surpriseTriggered && remainingSeconds <= state.surpriseTriggerAt) {
+      const allAlreadyClean = state.messes.every((m) => m.cleaned);
+      if (!allAlreadyClean) {
+        const newMesses = createRuntimeMesses(SURPRISE_MESSES);
+        set({ remainingSeconds, surpriseTriggered: true, messes: [...state.messes, ...newMesses] });
+        return;
+      }
     }
 
     set({ remainingSeconds });
@@ -108,7 +149,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       remainingSeconds: levelBedroom.timeLimitSeconds,
       phase: "playing",
       score: 0,
-      inspectionStartedAt: undefined
+      inspectionStartedAt: undefined,
+      surpriseTriggered: false,
+      surpriseTriggerAt: randomSurpriseTrigger()
     })
 }));
 
