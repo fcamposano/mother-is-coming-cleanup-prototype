@@ -8,7 +8,7 @@ import { ResultModal } from "../game/components/ResultModal";
 import { TimerBar } from "../game/components/TimerBar";
 import { ToolSelector } from "../game/components/ToolSelector";
 import { AssetRegistry } from "../game/assets/AssetRegistry";
-import { playSound, startMusic, stopMusic } from "../game/systems/AudioSystem";
+import { playSound, setMusicRate, startMusic, stopMusic } from "../game/systems/AudioSystem";
 import { triggerHaptic } from "../game/systems/HapticsSystem";
 import { selectCleanedCount, selectMissedCount, useGameStore } from "../game/state/gameStore";
 
@@ -69,6 +69,16 @@ export function GameScreen() {
 
     void stopMusic();
   }, [phase]);
+
+  // Speed up music as time runs out
+  useEffect(() => {
+    if (phase !== "playing" || !level) return;
+    const total = level.timeLimitSeconds;
+    const ratio = remainingSeconds / total; // 1.0 → 0.0
+    // rate goes from 1.0 (full time) up to 1.9 (last second)
+    const rate = 1.0 + (1.0 - ratio) * 0.9;
+    void setMusicRate(Math.min(rate, 1.9));
+  }, [remainingSeconds, phase]);
 
   useEffect(() => {
     if (phase !== "playing") {

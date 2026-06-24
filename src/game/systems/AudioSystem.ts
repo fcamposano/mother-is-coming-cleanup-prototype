@@ -62,6 +62,15 @@ export async function startMusic() {
   }
 }
 
+export async function setMusicRate(rate: number) {
+  if (!music) return;
+  try {
+    await music.setRateAsync(rate, false);
+  } catch {
+    // platform may not support rate change — silent fail
+  }
+}
+
 export async function stopMusic() {
   if (!music) {
     return;
