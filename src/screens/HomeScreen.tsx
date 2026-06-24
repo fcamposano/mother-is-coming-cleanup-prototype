@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Animated, Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Animated, Image, ImageSourcePropType, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { AssetRegistry } from "../game/assets/AssetRegistry";
 import { unlockAudio } from "../game/systems/AudioSystem";
@@ -10,6 +10,7 @@ type Room = {
   title: string;
   subtitle: string;
   emoji: string;
+  icon?: ImageSourcePropType;
   color: string;
   accentColor: string;
   available: boolean;
@@ -21,6 +22,7 @@ const ROOMS: Room[] = [
     title: "Trini's Room",
     subtitle: "9 messes · 50 sec",
     emoji: "🛏️",
+    icon: AssetRegistry.room_trinis_room_icon.image,
     color: "#5b8f8f",
     accentColor: "#f8efe0",
     available: true
@@ -176,7 +178,10 @@ function RoomCard({ room, onPress }: { room: Room; onPress: () => void }) {
         { backgroundColor: room.available ? room.color : "#ccc" },
         { transform: [{ scale }] }
       ]}>
-        <Text style={styles.cardEmoji}>{room.emoji}</Text>
+        {room.icon
+          ? <Image source={room.icon} style={styles.cardIcon} resizeMode="contain" />
+          : <Text style={styles.cardEmoji}>{room.emoji}</Text>
+        }
         <Text style={[styles.cardTitle, { color: room.available ? room.accentColor : "#888" }]}>
           {room.title}
         </Text>
@@ -272,6 +277,7 @@ const styles = StyleSheet.create({
     minHeight: 170
   },
   cardEmoji: { fontSize: 40, marginBottom: 8 },
+  cardIcon: { width: 72, height: 72, borderRadius: 36, marginBottom: 8 },
   cardTitle: { fontFamily: "TitanOne_400Regular", fontSize: 15, textAlign: "center", marginBottom: 4 },
   cardSub: { fontSize: 11, textAlign: "center", opacity: 0.85 },
   lockBadge: {
