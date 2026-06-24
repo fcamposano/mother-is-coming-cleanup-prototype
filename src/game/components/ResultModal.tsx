@@ -92,7 +92,7 @@ function WinModal({ score, cleanedCount, onRetry, onHome }: { score: number; cle
     return `✨ #${rank} — You made the board!`;
   };
 
-  const kissAsset = getAsset("character_mother_placeholder");
+  const kissAsset = getAsset("character_mother_kiss");
 
   return (
     <Animated.View style={[styles.backdrop, { opacity: fadeAnim }]}>
@@ -197,7 +197,7 @@ function WinModal({ score, cleanedCount, onRetry, onHome }: { score: number; cle
 }
 
 function LoseModal({ missedCount, missedLabels, score, onRetry, onHome }: { missedCount: number; missedLabels: string[]; score: number; onRetry: () => void; onHome?: () => void }) {
-  const screamAsset = getAsset("character_mother_placeholder");
+  const screamAsset = getAsset("character_mother_angry");
   const shakeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -291,8 +291,8 @@ const styles = StyleSheet.create({
     marginBottom: 8
   },
   characterImg: {
-    height: 140,
-    width: 100
+    height: 160,
+    width: 140
   },
   characterFallback: {
     fontSize: 60,

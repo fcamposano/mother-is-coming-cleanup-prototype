@@ -97,7 +97,25 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     placeholderText: "MOM",
     color: "#2c2c2c",
     accentColor: "#ff5b6e",
-    image: require("../../../assets/characters/mother-real.png")
+    image: require("../../../assets/characters/mother-neutral.png")
+  },
+  character_mother_neutral: {
+    key: "character_mother_neutral",
+    kind: "character",
+    label: "Mother Neutral",
+    placeholderText: "MOM",
+    color: "#2c2c2c",
+    accentColor: "#ff5b6e",
+    image: require("../../../assets/characters/mother-neutral.png")
+  },
+  character_mother_angry: {
+    key: "character_mother_angry",
+    kind: "character",
+    label: "Mother Angry",
+    placeholderText: "😠",
+    color: "#cc2244",
+    accentColor: "#ff6688",
+    image: require("../../../assets/characters/mother-angry.png")
   },
   character_ignacio: {
     key: "character_ignacio",
