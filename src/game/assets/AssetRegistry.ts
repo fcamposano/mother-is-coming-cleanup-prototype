@@ -117,6 +117,24 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     accentColor: "#ff6688",
     image: require("../../../assets/characters/mother-angry.png")
   },
+  character_parakeet_green: {
+    key: "character_parakeet_green",
+    kind: "character",
+    label: "Parakeet Green",
+    placeholderText: "🦜",
+    color: "#48aa3c",
+    accentColor: "#8cd25a",
+    image: require("../../../assets/characters/parakeet-green.png")
+  },
+  character_parakeet_gray: {
+    key: "character_parakeet_gray",
+    kind: "character",
+    label: "Parakeet Gray",
+    placeholderText: "🦜",
+    color: "#8c8c96",
+    accentColor: "#bebec8",
+    image: require("../../../assets/characters/parakeet-gray.png")
+  },
   character_ignacio: {
     key: "character_ignacio",
     kind: "character",

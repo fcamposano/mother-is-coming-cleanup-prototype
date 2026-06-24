@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Animated, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Animated, Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+
+import { AssetRegistry } from "../game/assets/AssetRegistry";
 
 import { getLeaderboard, LeaderboardEntry } from "../game/services/LeaderboardService";
 
@@ -49,6 +51,10 @@ export function HomeScreen({ onStartRoom }: Props) {
   const [board, setBoard] = useState<LeaderboardEntry[]>([]);
   const titleBounce = useRef(new Animated.Value(0)).current;
 
+  const birdBounce = useRef(new Animated.Value(0)).current;
+  const motherSlide = useRef(new Animated.Value(60)).current;
+  const motherOpacity = useRef(new Animated.Value(0)).current;
+
   useEffect(() => {
     void getLeaderboard().then(setBoard);
 
@@ -58,16 +64,63 @@ export function HomeScreen({ onStartRoom }: Props) {
         Animated.timing(titleBounce, { toValue: 0, duration: 700, useNativeDriver: true })
       ])
     ).start();
+
+    // Birds hop out of sync
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(birdBounce, { toValue: -8, duration: 400, useNativeDriver: true }),
+        Animated.timing(birdBounce, { toValue: 0, duration: 400, useNativeDriver: true }),
+        Animated.delay(300)
+      ])
+    ).start();
+
+    // Mother slides in on mount
+    Animated.parallel([
+      Animated.spring(motherSlide, { toValue: 0, friction: 7, tension: 50, useNativeDriver: true }),
+      Animated.timing(motherOpacity, { toValue: 1, duration: 400, useNativeDriver: true })
+    ]).start();
   }, []);
 
   return (
     <SafeAreaView style={styles.root}>
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        {/* Title */}
-        <Animated.Text style={[styles.title, { transform: [{ translateY: titleBounce }] }]}>
-          🧹 Mother Is Coming
-        </Animated.Text>
-        <Text style={styles.subtitle}>Clean before she arrives!</Text>
+        {/* Hero section */}
+        <View style={styles.hero}>
+          {/* Parakeets — left side */}
+          <View style={styles.birdsCol}>
+            <Animated.View style={{ transform: [{ translateY: birdBounce }] }}>
+              <Image
+                source={AssetRegistry.character_parakeet_green.image}
+                style={styles.birdImg}
+                resizeMode="contain"
+              />
+            </Animated.View>
+            <Animated.View style={{ transform: [{ translateY: birdBounce }], marginTop: -12 }}>
+              <Image
+                source={AssetRegistry.character_parakeet_gray.image}
+                style={[styles.birdImg, { transform: [{ scaleX: -1 }] }]}
+                resizeMode="contain"
+              />
+            </Animated.View>
+          </View>
+
+          {/* Title — center */}
+          <View style={styles.titleCol}>
+            <Animated.Text style={[styles.title, { transform: [{ translateY: titleBounce }] }]}>
+              🧹 Mother{"\n"}Is Coming
+            </Animated.Text>
+            <Text style={styles.subtitle}>Clean before she arrives!</Text>
+          </View>
+
+          {/* Mother — right side */}
+          <Animated.View style={[styles.motherCol, { opacity: motherOpacity, transform: [{ translateY: motherSlide }] }]}>
+            <Image
+              source={AssetRegistry.character_mother_neutral.image}
+              style={styles.motherImg}
+              resizeMode="contain"
+            />
+          </Animated.View>
+        </View>
 
         {/* Room cards */}
         <Text style={styles.sectionLabel}>Choose a Room</Text>
@@ -145,17 +198,49 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: "#fdf6ec" },
   scroll: { alignItems: "center", paddingHorizontal: 20, paddingTop: 32, paddingBottom: 48 },
 
+  hero: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+    width: "100%",
+    marginBottom: 28,
+    minHeight: 180
+  },
+  birdsCol: {
+    alignItems: "center",
+    justifyContent: "flex-end",
+    width: 72,
+    paddingBottom: 8
+  },
+  birdImg: {
+    width: 64,
+    height: 80
+  },
+  titleCol: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-end",
+    paddingBottom: 8
+  },
+  motherCol: {
+    width: 88,
+    alignItems: "center",
+    justifyContent: "flex-end"
+  },
+  motherImg: {
+    width: 88,
+    height: 180
+  },
   title: {
     fontFamily: "TitanOne_400Regular",
-    fontSize: 32,
+    fontSize: 26,
     color: "#2c2c2c",
     textAlign: "center",
-    marginBottom: 6
+    marginBottom: 4
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 13,
     color: "#886644",
-    marginBottom: 32,
     textAlign: "center"
   },
 
