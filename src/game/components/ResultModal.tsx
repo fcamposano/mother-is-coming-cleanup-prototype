@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Animated, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Animated, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
+import { getAsset } from "../assets/AssetRegistry";
 import { LeaderboardEntry, addEntry, getLeaderboard, qualifies } from "../services/LeaderboardService";
 
 type ResultModalProps = {
@@ -83,6 +84,8 @@ function WinModal({ score, cleanedCount, onRetry }: { score: number; cleanedCoun
     return `✨ #${rank} — You made the board!`;
   };
 
+  const kissAsset = getAsset("character_mother_kiss");
+
   return (
     <Animated.View style={[styles.backdrop, { opacity: fadeAnim }]}>
       {/* confetti dots */}
@@ -108,7 +111,16 @@ function WinModal({ score, cleanedCount, onRetry }: { score: number; cleanedCoun
       </View>
 
       <Animated.View style={[styles.panel, { transform: [{ translateY: slideAnim }] }]}>
-        <Text style={styles.winEmoji}>🎉</Text>
+        {/* Mother kiss portrait + speech bubble */}
+        <View style={styles.characterRow}>
+          {kissAsset.image
+            ? <Image source={kissAsset.image} style={styles.characterImg} resizeMode="contain" />
+            : <Text style={styles.characterFallback}>{kissAsset.placeholderText}</Text>}
+          <View style={styles.speechBubble}>
+            <Text style={styles.speechText}>¡Mwah! 💋{"\n"}Mi amor, the floor{"\n"}SHINES! 🌟</Text>
+            <View style={styles.speechTail} />
+          </View>
+        </View>
         <Text style={styles.winTitle}>Room survived!</Text>
         <Text style={styles.winSub}>Cleaned {cleanedCount} messes · Score {score}</Text>
 
@@ -166,14 +178,38 @@ function WinModal({ score, cleanedCount, onRetry }: { score: number; cleanedCoun
 }
 
 function LoseModal({ missedCount, missedLabels, score, onRetry }: { missedCount: number; missedLabels: string[]; score: number; onRetry: () => void }) {
+  const screamAsset = getAsset("character_mother_scream");
+  const shakeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(shakeAnim, { toValue: 5, duration: 60, useNativeDriver: true }),
+        Animated.timing(shakeAnim, { toValue: -5, duration: 60, useNativeDriver: true }),
+        Animated.timing(shakeAnim, { toValue: 3, duration: 60, useNativeDriver: true }),
+        Animated.timing(shakeAnim, { toValue: 0, duration: 60, useNativeDriver: true }),
+        Animated.delay(400)
+      ])
+    ).start();
+  }, [shakeAnim]);
+
   return (
     <View style={styles.backdrop}>
       <View style={[styles.panel, styles.panelLose]}>
-        <Text style={styles.loseEmoji}>😱</Text>
+        {/* Screaming mother + speech bubble */}
+        <Animated.View style={[styles.characterRow, { transform: [{ translateX: shakeAnim }] }]}>
+          {screamAsset.image
+            ? <Image source={screamAsset.image} style={styles.characterImg} resizeMode="contain" />
+            : <Text style={styles.characterFallback}>{screamAsset.placeholderText}</Text>}
+          <View style={[styles.speechBubble, styles.speechBubbleScream]}>
+            <Text style={[styles.speechText, styles.speechTextScream]}>I can SMELL{"\n"}the chaos!!!{"\n"}😱😱😱</Text>
+            <View style={[styles.speechTail, styles.speechTailScream]} />
+          </View>
+        </Animated.View>
         <Text style={styles.loseTitle}>Mom found evidence</Text>
         <Text style={styles.loseSub}>Score {score} · {missedCount} mess{missedCount !== 1 ? "es" : ""} busted</Text>
         <Text style={styles.loseJoke}>
-          The red flags are not decorations. Apparently that matters.
+          The red flags are not decorations.{"\n"}Apparently that matters.
         </Text>
         {missedLabels.length > 0 && (
           <View style={styles.missedWrap}>
@@ -221,8 +257,63 @@ const styles = StyleSheet.create({
     borderColor: "#cc1133"
   },
 
-  // Win
-  winEmoji: { fontSize: 40, textAlign: "center", marginBottom: 4 },
+  // Character portrait row
+  characterRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: 8
+  },
+  characterImg: {
+    height: 140,
+    width: 100
+  },
+  characterFallback: {
+    fontSize: 60,
+    textAlign: "center",
+    width: 100
+  },
+  speechBubble: {
+    backgroundColor: "#fffaf3",
+    borderColor: "#28231f",
+    borderRadius: 12,
+    borderWidth: 2.5,
+    flex: 1,
+    marginLeft: 10,
+    padding: 10,
+    position: "relative"
+  },
+  speechTail: {
+    borderBottomColor: "transparent",
+    borderBottomWidth: 10,
+    borderRightColor: "#28231f",
+    borderRightWidth: 14,
+    borderTopColor: "transparent",
+    borderTopWidth: 10,
+    height: 0,
+    left: -14,
+    position: "absolute",
+    top: 18,
+    width: 0
+  },
+  speechText: {
+    color: "#28231f",
+    fontSize: 14,
+    fontWeight: "800",
+    lineHeight: 20
+  },
+  speechBubbleScream: {
+    backgroundColor: "#fff0f2",
+    borderColor: "#cc1133"
+  },
+  speechTailScream: {
+    borderRightColor: "#cc1133"
+  },
+  speechTextScream: {
+    color: "#9d1829",
+    fontWeight: "900"
+  },
+
   winTitle: {
     color: "#28231f",
     fontFamily: "TitanOne_400Regular",
@@ -346,8 +437,6 @@ const styles = StyleSheet.create({
     textAlign: "right"
   },
 
-  // Lose
-  loseEmoji: { fontSize: 40, textAlign: "center", marginBottom: 4 },
   loseTitle: {
     color: "#9d1829",
     fontFamily: "TitanOne_400Regular",

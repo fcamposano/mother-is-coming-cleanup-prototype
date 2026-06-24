@@ -408,6 +408,137 @@ writePng(260, 360, join(dirs.characters, "mother-cartoon.png"), (image) => {
   blendRect(image, 140, 86, 20, 10, "#d86c7b45");
 });
 
+// Shared body drawing helper (red dress, arms, legs, skin tone)
+function drawMotherBody(image) {
+  ellipse(image, 132, 318, 72, 22, "#00000028");          // floor shadow
+  gradientRect(image, 82, 118, 98, 150, "#bf3042", "#7f1f2a"); // dress body
+  insetHighlight(image, 82, 118, 98, 150, "#ffffff35", "#00000032");
+  ellipse(image, 82, 170, 22, 78, "#54332a");              // left sleeve
+  ellipse(image, 178, 170, 22, 78, "#54332a");             // right sleeve
+  line(image, 73, 162, 58, 238, "#f0b98f", 12);            // left arm
+  line(image, 187, 162, 206, 238, "#f0b98f", 12);          // right arm
+  rect(image, 94, 260, 30, 74, "#2f3035");                 // left leg
+  rect(image, 138, 260, 30, 74, "#2f3035");                // right leg
+  ellipse(image, 109, 337, 22, 9, "#1d1d20");              // left shoe
+  ellipse(image, 153, 337, 22, 9, "#1d1d20");              // right shoe
+}
+
+// MOTHER KISS — happy, rosy, hearts everywhere 💋
+writePng(260, 360, join(dirs.characters, "mother-kiss.png"), (image) => {
+  drawMotherBody(image);
+  // Head
+  ellipse(image, 130, 72, 54, 58, "#e8b78f");
+  // Hair — wavy happy bob
+  ellipse(image, 130, 40, 64, 38, "#3a241d");
+  ellipse(image, 84, 68, 22, 52, "#3a241d");
+  ellipse(image, 176, 68, 22, 52, "#3a241d");
+  // Extra wavy happy bumps on hair
+  ellipse(image, 105, 22, 18, 14, "#3a241d");
+  ellipse(image, 130, 16, 18, 14, "#3a241d");
+  ellipse(image, 155, 22, 18, 14, "#3a241d");
+  // Happy squint eyes (curved — drawn as small dark arcs)
+  ellipse(image, 112, 68, 9, 5, "#171313");
+  ellipse(image, 112, 65, 9, 4, "#e8b78f"); // erase top to make arc
+  ellipse(image, 148, 68, 9, 5, "#171313");
+  ellipse(image, 148, 65, 9, 4, "#e8b78f");
+  // Rosy cheeks
+  ellipse(image, 100, 82, 16, 10, "#ff8fa0bb");
+  ellipse(image, 160, 82, 16, 10, "#ff8fa0bb");
+  // Puckered lips 💋
+  ellipse(image, 130, 96, 14, 11, "#cc2244");
+  ellipse(image, 130, 93, 10, 6, "#ff4466");
+  ellipse(image, 130, 96, 5, 4, "#ff6688");
+  // Eyebrows — happy raised
+  line(image, 104, 56, 122, 52, "#3a241d", 2);
+  line(image, 138, 52, 156, 56, "#3a241d", 2);
+  // Nose
+  ellipse(image, 130, 84, 5, 4, "#c98d70");
+  // Hearts floating around — small pixel hearts
+  // Heart = two ellipses + triangle shape approximated with ellipses
+  for (const [hx, hy, hr, col] of [
+    [56, 40, 10, "#ff3366"], [200, 50, 14, "#ff6699"], [42, 100, 8, "#ff99bb"],
+    [214, 110, 10, "#ff3366"], [72, 160, 7, "#ff6699"], [195, 155, 8, "#ff3366"],
+    [48, 200, 9, "#ff99bb"], [208, 195, 11, "#ff6699"]
+  ]) {
+    ellipse(image, hx - hr * 0.28, hy - hr * 0.1, hr * 0.4, hr * 0.35, col);
+    ellipse(image, hx + hr * 0.28, hy - hr * 0.1, hr * 0.4, hr * 0.35, col);
+    // bottom point of heart (approximate with ellipse)
+    ellipse(image, hx, hy + hr * 0.3, hr * 0.38, hr * 0.45, col);
+  }
+  // Sparkle stars near face
+  for (const [sx, sy] of [[62, 28], [198, 32], [220, 75]]) {
+    line(image, sx - 7, sy, sx + 7, sy, "#ffd53d", 2);
+    line(image, sx, sy - 7, sx, sy + 7, "#ffd53d", 2);
+    line(image, sx - 4, sy - 4, sx + 4, sy + 4, "#ffd53d", 1);
+    line(image, sx + 4, sy - 4, sx - 4, sy + 4, "#ffd53d", 1);
+  }
+  // Arms raised in celebration — override with raised position
+  line(image, 82, 140, 48, 100, "#f0b98f", 12);
+  line(image, 178, 140, 212, 100, "#f0b98f", 12);
+});
+
+// MOTHER SCREAM — wide mouth, wild hair, shock lines 😱
+writePng(260, 360, join(dirs.characters, "mother-scream.png"), (image) => {
+  drawMotherBody(image);
+  // Head
+  ellipse(image, 130, 72, 54, 58, "#e8b78f");
+  // Wild hair sticking up in all directions
+  ellipse(image, 130, 36, 62, 42, "#3a241d");
+  ellipse(image, 82, 62, 24, 56, "#3a241d");
+  ellipse(image, 178, 62, 24, 56, "#3a241d");
+  // Wild spiky hair tufts
+  for (const [tx, ty, tr] of [
+    [100, 14, 12], [118, 8, 10], [130, 4, 11], [144, 8, 10], [162, 14, 12],
+    [80, 30, 10], [180, 30, 10]
+  ]) {
+    ellipse(image, tx, ty, tr, tr * 1.4, "#3a241d");
+  }
+  // Wide open shocked eyes — white showing
+  ellipse(image, 112, 68, 13, 13, "#ffffff");
+  ellipse(image, 148, 68, 13, 13, "#ffffff");
+  ellipse(image, 112, 68, 8, 8, "#3a1a10");  // iris
+  ellipse(image, 148, 68, 8, 8, "#3a1a10");
+  ellipse(image, 112, 68, 4, 4, "#080808");  // pupil
+  ellipse(image, 148, 68, 4, 4, "#080808");
+  ellipse(image, 114, 66, 2, 2, "#ffffff");  // eye highlight
+  ellipse(image, 150, 66, 2, 2, "#ffffff");
+  // Shocked eyebrows — high and arched
+  line(image, 100, 50, 122, 44, "#3a241d", 3);
+  line(image, 138, 44, 160, 50, "#3a241d", 3);
+  // Nose
+  ellipse(image, 130, 84, 5, 4, "#c98d70");
+  // Wide open screaming mouth — big O
+  ellipse(image, 130, 102, 22, 18, "#1a0808");  // mouth opening dark
+  ellipse(image, 130, 99, 18, 10, "#cc2244");   // upper lip
+  ellipse(image, 130, 108, 18, 10, "#cc2244");  // lower lip
+  ellipse(image, 130, 102, 14, 12, "#080808");  // mouth interior dark
+  // Teeth (small white rect at top of mouth)
+  rect(image, 120, 96, 20, 8, "#f0ece4");
+  // Shock lines radiating from head
+  for (let si = 0; si < 12; si++) {
+    const angle = (si / 12) * Math.PI * 2;
+    const r1 = 72, r2 = 92;
+    line(image,
+      Math.round(130 + Math.cos(angle) * r1),
+      Math.round(70 + Math.sin(angle) * r1),
+      Math.round(130 + Math.cos(angle) * r2),
+      Math.round(70 + Math.sin(angle) * r2),
+      "#ff3322", 2
+    );
+  }
+  // Sweat drops
+  for (const [sx, sy] of [[86, 58], [176, 54], [94, 95], [168, 90]]) {
+    ellipse(image, sx, sy, 5, 7, "#80cceecc");
+    ellipse(image, sx, sy - 3, 3, 3, "#aae4f8cc");
+  }
+  // Anger/stress marks on forehead
+  line(image, 104, 40, 110, 46, "#cc2244", 2);
+  line(image, 150, 46, 156, 40, "#cc2244", 2);
+  // Arms raised in panic
+  line(image, 82, 140, 44, 98, "#f0b98f", 12);
+  line(image, 178, 140, 216, 98, "#f0b98f", 12);
+});
+
 for (const [name, color, accent] of [
   ["vacuum.png", "#3457d5", "#b9c9ff"],
   ["mop.png", "#008c8c", "#a7f0e8"],

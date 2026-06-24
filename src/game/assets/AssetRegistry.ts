@@ -99,6 +99,24 @@ export const AssetRegistry: Record<string, AssetDefinition> = {
     accentColor: "#ff5b6e",
     image: require("../../../assets/characters/mother-real.png")
   },
+  character_mother_kiss: {
+    key: "character_mother_kiss",
+    kind: "character",
+    label: "Mother Kiss",
+    placeholderText: "💋",
+    color: "#ff3366",
+    accentColor: "#ffb3c6",
+    image: require("../../../assets/characters/mother-kiss.png")
+  },
+  character_mother_scream: {
+    key: "character_mother_scream",
+    kind: "character",
+    label: "Mother Scream",
+    placeholderText: "😱",
+    color: "#cc2244",
+    accentColor: "#ff6688",
+    image: require("../../../assets/characters/mother-scream.png")
+  },
   tool_vacuum: {
     key: "tool_vacuum",
     kind: "tool",
