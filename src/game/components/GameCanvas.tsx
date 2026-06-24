@@ -136,20 +136,23 @@ export function GameCanvas({
 function RoomDressing() {
   return (
     <>
-      <View style={[styles.furniture, styles.bed]}>
-        <Text style={styles.furnitureText}>BED</Text>
+      <View style={[styles.furniture, styles.bedLeft]}>
+        <Text style={styles.furnitureText}>BED 1</Text>
+      </View>
+      <View style={[styles.furniture, styles.bedRight]}>
+        <Text style={styles.furnitureText}>BED 2</Text>
       </View>
       <View style={[styles.furniture, styles.desk]}>
         <Text style={styles.furnitureText}>DESK</Text>
+      </View>
+      <View style={[styles.furniture, styles.dresser]}>
+        <Text style={styles.furnitureText}>DRESSER</Text>
       </View>
       <View style={[styles.furniture, styles.rug]}>
         <Text style={styles.furnitureText}>RUG</Text>
       </View>
       <View style={[styles.furniture, styles.window]}>
         <Text style={styles.furnitureText}>WINDOW</Text>
-      </View>
-      <View style={[styles.furniture, styles.closet]}>
-        <Text style={styles.furnitureText}>CLOSET</Text>
       </View>
     </>
   );
@@ -386,40 +389,47 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "900"
   },
-  bed: {
-    backgroundColor: "#b8d4e8",
-    height: 280,
-    left: 548,
-    top: 242,
-    width: 330
+  bedLeft: {
+    backgroundColor: "#b8a4d8",
+    height: 298,
+    left: 44,
+    top: 80,
+    width: 378
+  },
+  bedRight: {
+    backgroundColor: "#e8a4b4",
+    height: 298,
+    left: 558,
+    top: 80,
+    width: 378
   },
   desk: {
-    backgroundColor: "#dfb57e",
-    height: 154,
-    left: 74,
-    top: 118,
-    width: 250
+    backgroundColor: "#c89060",
+    height: 210,
+    left: 438,
+    top: 100,
+    width: 104
+  },
+  dresser: {
+    backgroundColor: "#c4956a",
+    height: 198,
+    left: 44,
+    top: 500,
+    width: 258
   },
   rug: {
-    backgroundColor: "#e9c66f",
-    height: 330,
-    left: 184,
-    top: 458,
-    width: 322
+    backgroundColor: "#c43050",
+    height: 450,
+    left: 136,
+    top: 750,
+    width: 708
   },
   window: {
     backgroundColor: "#bce9ec",
-    height: 150,
-    left: 684,
-    top: 706,
-    width: 210
-  },
-  closet: {
-    backgroundColor: "#d6c2aa",
-    height: 250,
-    left: 500,
-    top: 48,
-    width: 300
+    height: 178,
+    left: 730,
+    top: 490,
+    width: 192
   },
   mess: {
     alignItems: "center",

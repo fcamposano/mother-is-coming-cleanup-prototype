@@ -156,70 +156,164 @@ function writePng(width, height, filePath, draw) {
 }
 
 writePng(980, 1480, join(dirs.rooms, "bedroom-cartoon.png"), (image) => {
+  // ── Floor ──────────────────────────────────────────────────────────────
   woodPlanks(image, 0, 0, 980, 1480);
-  shadow(image, 34, 34, 912, 1412, 0.22, 26);
-  gradientRect(image, 34, 34, 912, 1412, "#f0d5a9", "#d7aa6c");
-  for (let y = 64; y < 1418; y += 82) line(image, 34, y, 946, y + 10, "#9f663545", 2);
-  for (let x = 58; x < 930; x += 118) line(image, x, 34, x + 94, 1446, "#f7d49b30", 2);
-  dots(image, 1200, { x: 42, y: 42, w: 896, h: 1396 }, ["#7a472318", "#ffffff22", "#3b241015", "#e8bd7a26"], 1, 2);
+  shadow(image, 28, 28, 924, 1424, 0.20, 22);
+  gradientRect(image, 28, 28, 924, 1424, "#ede0c8", "#d4b987");
+  for (let y = 60; y < 1440; y += 76) line(image, 28, y, 952, y + 8, "#9e6b3a30", 1);
+  for (let x = 60; x < 940; x += 110) line(image, x, 28, x + 80, 1452, "#e8c98018", 1);
+  dots(image, 900, { x: 36, y: 36, w: 908, h: 1408 }, ["#7a472315", "#ffffff1a", "#3b240f12", "#d9a86020"], 1, 2);
 
-  // Desk with believable top-down objects.
-  shadow(image, 74, 118, 250, 154, 0.22, 18);
-  gradientRect(image, 74, 118, 250, 154, "#9a5d2f", "#75401f");
-  insetHighlight(image, 74, 118, 250, 154);
-  for (let x = 86; x < 310; x += 36) line(image, x, 124, x + 20, 266, "#5e341b55", 1);
-  shadow(image, 108, 142, 94, 62, 0.12, 8);
-  gradientRect(image, 108, 142, 94, 62, "#353943", "#171a20");
-  rect(image, 118, 151, 74, 43, "#5f7d95");
-  rect(image, 210, 152, 78, 40, "#f3efe4");
-  line(image, 218, 164, 280, 164, "#b89f7f", 2);
-  line(image, 218, 178, 270, 178, "#b89f7f", 2);
-  ellipse(image, 284, 228, 20, 20, "#6b3f24");
-  ellipse(image, 284, 228, 13, 13, "#2f1c12");
+  // ── North wall edge ──────────────────────────────────────────────────────
+  gradientRect(image, 28, 28, 924, 58, "#c0a06e", "#d4b987");
+  line(image, 28, 86, 952, 86, "#8a6030", 3);
 
-  // Closet and raised doors.
-  shadow(image, 500, 48, 300, 250, 0.2, 20);
-  gradientRect(image, 500, 48, 300, 250, "#bfa17b", "#91704e");
-  insetHighlight(image, 500, 48, 300, 250);
-  line(image, 650, 48, 650, 298, "#5f3c22", 6);
-  ellipse(image, 624, 170, 7, 7, "#2f2119");
-  ellipse(image, 676, 170, 7, 7, "#2f2119");
-  dots(image, 160, { x: 512, y: 62, w: 276, h: 220 }, ["#ffffff18", "#5d3d2222", "#d6b68a24"], 1, 2);
+  // ── BED 1 — LEFT (lavender blanket) ──────────────────────────────────────
+  shadow(image, 44, 80, 378, 298, 0.24, 20);
+  gradientRect(image, 44, 80, 378, 298, "#7a5236", "#573519");
+  insetHighlight(image, 44, 80, 378, 298, "#c49a6044", "#00000030");
+  gradientRect(image, 44, 80, 378, 40, "#4e2e14", "#3a1e0a");    // headboard
+  gradientRect(image, 62, 124, 342, 228, "#d4c8b6", "#beb0a0");  // mattress
+  gradientRect(image, 62, 196, 342, 138, "#9b7ec8", "#7354a8");  // lavender blanket
+  for (let i = 0; i < 8; i++) line(image, 76 + i * 42, 206, 60 + i * 44, 326, "#ffffff1a", 2);
+  line(image, 62, 196, 404, 196, "#c4a0f055", 2);
+  // Two pillows
+  shadow(image, 80, 130, 126, 56, 0.12, 6);
+  gradientRect(image, 80, 130, 126, 56, "#f4ede0", "#ddd0be");
+  insetHighlight(image, 80, 130, 126, 56, "#ffffff60", "#5a3a2020");
+  shadow(image, 226, 130, 126, 56, 0.12, 6);
+  gradientRect(image, 226, 130, 126, 56, "#f4ede0", "#ddd0be");
+  insetHighlight(image, 226, 130, 126, 56, "#ffffff60", "#5a3a2020");
+  gradientRect(image, 44, 352, 378, 26, "#4e2e14", "#3a1e0a");   // footboard
 
-  // Bed with pillows, layered blanket, wrinkles, and drop shadow.
-  shadow(image, 548, 242, 330, 280, 0.25, 24);
-  gradientRect(image, 548, 242, 330, 280, "#8bb9d3", "#5f96ba");
-  insetHighlight(image, 548, 242, 330, 280);
-  gradientRect(image, 588, 268, 250, 96, "#f8f0e2", "#d9cfc1");
-  line(image, 712, 276, 712, 358, "#b7aa9a55", 3);
-  gradientRect(image, 584, 382, 258, 112, "#477da8", "#2f6792");
-  for (let i = 0; i < 7; i += 1) line(image, 600 + i * 35, 392, 582 + i * 38, 486, "#ffffff1c", 2);
-  line(image, 584, 382, 842, 382, "#e5f3ff55", 3);
+  // ── BED 2 — RIGHT (coral/pink blanket) ───────────────────────────────────
+  shadow(image, 558, 80, 378, 298, 0.24, 20);
+  gradientRect(image, 558, 80, 378, 298, "#7a5236", "#573519");
+  insetHighlight(image, 558, 80, 378, 298, "#c49a6044", "#00000030");
+  gradientRect(image, 558, 80, 378, 40, "#4e2e14", "#3a1e0a");
+  gradientRect(image, 576, 124, 342, 228, "#d4c8b6", "#beb0a0");
+  gradientRect(image, 576, 196, 342, 138, "#d96e82", "#b84a5c");  // coral blanket
+  for (let i = 0; i < 8; i++) line(image, 590 + i * 42, 206, 574 + i * 44, 326, "#ffffff1a", 2);
+  line(image, 576, 196, 918, 196, "#f4a0b055", 2);
+  shadow(image, 594, 130, 126, 56, 0.12, 6);
+  gradientRect(image, 594, 130, 126, 56, "#f4ede0", "#ddd0be");
+  insetHighlight(image, 594, 130, 126, 56, "#ffffff60", "#5a3a2020");
+  shadow(image, 740, 130, 126, 56, 0.12, 6);
+  gradientRect(image, 740, 130, 126, 56, "#f4ede0", "#ddd0be");
+  insetHighlight(image, 740, 130, 126, 56, "#ffffff60", "#5a3a2020");
+  gradientRect(image, 558, 352, 378, 26, "#4e2e14", "#3a1e0a");
 
-  // Warm rug with woven fibers.
-  shadow(image, 184, 458, 322, 330, 0.18, 18);
-  gradientRect(image, 184, 458, 322, 330, "#d6a92d", "#b8841f");
-  ellipse(image, 345, 623, 178, 154, "#f1cb5fdd");
-  for (let i = 0; i < 120; i += 1) {
-    const y = 482 + rand() * 280;
-    line(image, 210 + rand() * 250, y, 242 + rand() * 230, y + rand() * 8 - 4, "#8f641e35", 1);
+  // ── DESK between the beds ────────────────────────────────────────────────
+  shadow(image, 438, 100, 104, 210, 0.18, 12);
+  gradientRect(image, 438, 100, 104, 210, "#a87040", "#7e5020");
+  insetHighlight(image, 438, 100, 104, 210, "#e8b06040", "#00000028");
+  // Lamp on desk
+  ellipse(image, 472, 148, 20, 20, "#f7e8a4");
+  ellipse(image, 472, 148, 11, 11, "#fdf9e0");
+  ellipse(image, 472, 148, 4, 4, "#ffec40");
+  // Book/notebook
+  gradientRect(image, 446, 204, 82, 54, "#e8dfc8", "#d4c8b0");
+  line(image, 476, 208, 476, 254, "#a08060", 2);
+  line(image, 454, 222, 518, 222, "#c4a88044", 1);
+  line(image, 454, 236, 518, 236, "#c4a88044", 1);
+
+  // ── DRESSER with BIRDCAGE (left wall, below bed 1) ────────────────────────
+  shadow(image, 44, 500, 258, 198, 0.22, 18);
+  gradientRect(image, 44, 500, 258, 198, "#c4956a", "#9a6840");
+  insetHighlight(image, 44, 500, 258, 198, "#e8c08044", "#00000030");
+  // Three drawers
+  for (let d = 0; d < 3; d++) {
+    const dy = 518 + d * 58;
+    gradientRect(image, 60, dy, 226, 44, "#b88050", "#9a6438");
+    insetHighlight(image, 60, dy, 226, 44, "#e0b07040", "#00000028");
+    ellipse(image, 173, dy + 22, 9, 6, "#5a3820");
   }
-  insetHighlight(image, 184, 458, 322, 330, "#fff1a93a", "#5d3b1126");
+  // Mirror above dresser
+  shadow(image, 78, 378, 194, 116, 0.14, 10);
+  gradientRect(image, 78, 378, 194, 116, "#8ed2dc", "#6ab8c4");
+  rect(image, 84, 384, 182, 104, "#c8f0f8");
+  insetHighlight(image, 78, 378, 194, 116, "#ffffff55", "#2860703a");
+  blendRect(image, 90, 390, 58, 38, "#ffffff28");
 
-  // Window with daylight spill.
-  blendRect(image, 610, 650, 300, 300, "#aeeaf222");
-  shadow(image, 684, 706, 210, 150, 0.14, 12);
-  gradientRect(image, 684, 706, 210, 150, "#8ed2dc", "#5faeba");
-  line(image, 789, 706, 789, 856, "#f9ffff", 6);
-  line(image, 684, 781, 894, 781, "#f9ffff", 6);
-  insetHighlight(image, 684, 706, 210, 150, "#ffffff66", "#28626e33");
+  // BIRDCAGE on dresser top ─────────────────────────────────────────────────
+  // Stand pole
+  rect(image, 153, 460, 10, 42, "#8a7050");
+  rect(image, 122, 498, 68, 6, "#7a6040");
+  // Cage shadow + body
+  ellipse(image, 158, 442, 54, 40, "#00000020");
+  ellipse(image, 155, 438, 54, 40, "#c8b890");
+  ellipse(image, 155, 438, 48, 34, "#e8f4e8");
+  // Cage bars (top-down radial)
+  for (let bar = 0; bar < 12; bar++) {
+    const angle = (bar / 12) * Math.PI * 2;
+    line(image, 155, 438, Math.round(155 + Math.cos(angle) * 46), Math.round(438 + Math.sin(angle) * 32), "#a09060", 1);
+  }
+  // Dome highlight
+  ellipse(image, 155, 422, 46, 16, "#d8e8d888");
+  // Parakeet 1 — green
+  ellipse(image, 140, 440, 13, 9, "#2eaa52");
+  ellipse(image, 134, 437, 7, 5, "#52cc72");
+  ellipse(image, 147, 434, 5, 4, "#1e7a38");
+  ellipse(image, 149, 433, 2, 2, "#101010");
+  ellipse(image, 150, 434, 1, 1, "#f0c020");
+  // Parakeet 2 — blue/yellow
+  ellipse(image, 169, 444, 12, 9, "#2a82d4");
+  ellipse(image, 175, 441, 7, 5, "#5ab4f4");
+  ellipse(image, 161, 439, 5, 4, "#1a5ca0");
+  ellipse(image, 159, 438, 2, 2, "#101010");
+  ellipse(image, 158, 439, 1, 1, "#f0c020");
 
-  // Door and threshold.
-  shadow(image, 700, 1170, 150, 238, 0.22, 18);
-  gradientRect(image, 700, 1170, 150, 238, "#a47745", "#704920");
-  insetHighlight(image, 700, 1170, 150, 238);
-  ellipse(image, 824, 1288, 8, 8, "#312116");
-  rect(image, 682, 1406, 190, 18, "#4b2f19");
+  // ── NIGHTSTANDS ───────────────────────────────────────────────────────────
+  shadow(image, 44, 386, 86, 80, 0.14, 8);
+  gradientRect(image, 44, 386, 86, 80, "#9a6840", "#7a4c28");
+  insetHighlight(image, 44, 386, 86, 80, "#e0a06030", "#00000020");
+  ellipse(image, 74, 408, 14, 14, "#e8c860aa");
+  ellipse(image, 74, 408, 8, 8, "#f4e890cc");
+
+  shadow(image, 850, 386, 86, 80, 0.14, 8);
+  gradientRect(image, 850, 386, 86, 80, "#9a6840", "#7a4c28");
+  insetHighlight(image, 850, 386, 86, 80, "#e0a06030", "#00000020");
+  ellipse(image, 886, 408, 11, 11, "#60a0e0aa");
+  ellipse(image, 886, 408, 6, 6, "#80c0f0cc");
+
+  // ── RUG (center lower) ────────────────────────────────────────────────────
+  shadow(image, 136, 750, 708, 450, 0.18, 20);
+  gradientRect(image, 136, 750, 708, 450, "#c43050", "#9a1a38");
+  ellipse(image, 490, 975, 362, 222, "#e84868cc");
+  ellipse(image, 490, 975, 278, 168, "#c43050aa");
+  for (let i = 0; i < 160; i++) {
+    const ry = 770 + rand() * 410;
+    line(image, 156 + rand() * 640, ry, 178 + rand() * 600, ry + rand() * 8 - 4, "#7a102835", 1);
+  }
+  insetHighlight(image, 136, 750, 708, 450, "#f080a04a", "#50001822");
+  for (let i = 0; i < 8; i++) {
+    ellipse(image, 196 + i * 90, 766, 12, 8, "#f0a0b0aa");
+    ellipse(image, 196 + i * 90, 1184, 12, 8, "#f0a0b0aa");
+  }
+
+  // ── WINDOW (right wall) ───────────────────────────────────────────────────
+  blendRect(image, 700, 450, 248, 290, "#aeeaf218");
+  shadow(image, 730, 490, 192, 178, 0.14, 14);
+  gradientRect(image, 730, 490, 192, 178, "#8ed2dc", "#5faabc");
+  line(image, 826, 490, 826, 668, "#ffffff", 5);
+  line(image, 730, 579, 922, 579, "#ffffff", 5);
+  insetHighlight(image, 730, 490, 192, 178, "#ffffff66", "#28626e33");
+  // Curtains
+  gradientRect(image, 716, 466, 38, 216, "#e8a0c0", "#c870a0");
+  for (let fc = 0; fc < 5; fc++) line(image, 720, 472 + fc * 40, 748, 484 + fc * 40, "#ffffff30", 2);
+  gradientRect(image, 926, 466, 38, 216, "#e8a0c0", "#c870a0");
+  for (let fc = 0; fc < 5; fc++) line(image, 930, 472 + fc * 40, 958, 484 + fc * 40, "#ffffff30", 2);
+
+  // ── DOOR (bottom center) ──────────────────────────────────────────────────
+  shadow(image, 386, 1272, 168, 206, 0.22, 18);
+  gradientRect(image, 386, 1272, 168, 206, "#a47040", "#7a4a20");
+  insetHighlight(image, 386, 1272, 168, 206);
+  rect(image, 400, 1288, 140, 74, "#8a5c2a");
+  rect(image, 400, 1378, 140, 86, "#8a5c2a");
+  insetHighlight(image, 400, 1288, 140, 74, "#c4924040", "#00000028");
+  insetHighlight(image, 400, 1378, 140, 86, "#c4924040", "#00000028");
+  ellipse(image, 538, 1390, 8, 8, "#3a2010");
+  rect(image, 372, 1474, 210, 6, "#5a3418");
 });
 
 const messes = [
