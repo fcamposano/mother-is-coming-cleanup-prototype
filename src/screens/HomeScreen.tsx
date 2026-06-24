@@ -90,7 +90,7 @@ export function HomeScreen({ onStartRoom }: Props) {
           <View style={styles.birdsCol}>
             <Animated.View style={{ transform: [{ translateY: birdBounce }] }}>
               <Image
-                source={AssetRegistry.character_parakeet_green.image}
+                source={AssetRegistry.character_parakeet_blue.image}
                 style={styles.birdImg}
                 resizeMode="contain"
               />
