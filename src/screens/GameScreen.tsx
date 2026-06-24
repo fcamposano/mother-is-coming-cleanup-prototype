@@ -364,7 +364,7 @@ export function GameScreen({ onExit }: { onExit?: () => void }) {
           <View style={styles.exitOverlay}>
             <View style={styles.exitBox}>
               <Text style={styles.exitTitle}>Exit game?</Text>
-              <Text style={styles.exitBody}>Your progress will be lost.</Text>
+              <Text style={styles.exitBody}>¿Le tienes susto a la Mamá? 😱{"\n"}Your progress will be lost.</Text>
               <View style={styles.exitButtons}>
                 <Pressable style={styles.exitCancel} onPress={() => setShowExitConfirm(false)}>
                   <Text style={styles.exitCancelText}>Keep playing</Text>
