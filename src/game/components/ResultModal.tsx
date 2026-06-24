@@ -84,7 +84,7 @@ function WinModal({ score, cleanedCount, onRetry }: { score: number; cleanedCoun
     return `✨ #${rank} — You made the board!`;
   };
 
-  const kissAsset = getAsset("character_mother_kiss");
+  const kissAsset = getAsset("character_mother_placeholder");
 
   return (
     <Animated.View style={[styles.backdrop, { opacity: fadeAnim }]}>
@@ -178,7 +178,7 @@ function WinModal({ score, cleanedCount, onRetry }: { score: number; cleanedCoun
 }
 
 function LoseModal({ missedCount, missedLabels, score, onRetry }: { missedCount: number; missedLabels: string[]; score: number; onRetry: () => void }) {
-  const screamAsset = getAsset("character_mother_scream");
+  const screamAsset = getAsset("character_mother_placeholder");
   const shakeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
