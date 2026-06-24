@@ -58,16 +58,4 @@ function formatDate(iso: string): string {
   return `${d.toLocaleString("default", { month: "short" })} ${d.getDate()}`;
 }
 
-// Fallback if Supabase is unreachable
-const SEEDS: LeaderboardEntry[] = [
-  { name: "Trini 🦜", score: 940, date: "Jun 1" },
-  { name: "Claude 🤖", score: 880, date: "Jun 10" },
-  { name: "Sofía ⭐", score: 810, date: "Jun 12" },
-  { name: "Mom 👀", score: 760, date: "Jun 14" },
-  { name: "Pablito 🎮", score: 700, date: "Jun 15" },
-  { name: "Caro 🌸", score: 640, date: "Jun 17" },
-  { name: "Tío Rafa 😅", score: 580, date: "Jun 18" },
-  { name: "Vale 🎵", score: 510, date: "Jun 20" },
-  { name: "Benja 🚀", score: 440, date: "Jun 21" },
-  { name: "Luli 🐦", score: 360, date: "Jun 22" }
-];
+const SEEDS: LeaderboardEntry[] = [];
