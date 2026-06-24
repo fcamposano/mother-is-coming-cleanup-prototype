@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Animated, Easing, Image, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Animated, Easing, Image, Modal, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { DebugOverlay } from "../game/components/DebugOverlay";
@@ -42,6 +42,7 @@ export function GameScreen({ onExit }: { onExit?: () => void }) {
   const surpriseTriggered = useGameStore((state) => state.surpriseTriggered);
   const surpriseShownRef = useRef(false);
   const [showIgnacio, setShowIgnacio] = useState(false);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
   const ignacioSlide = useRef(new Animated.Value(-320)).current;
   const ignacioOpacity = useRef(new Animated.Value(0)).current;
   const [projectiles, setProjectiles] = useState<Array<{
@@ -272,7 +273,7 @@ export function GameScreen({ onExit }: { onExit?: () => void }) {
             <TimerBar remainingSeconds={remainingSeconds} totalSeconds={level.timeLimitSeconds} />
             <View style={styles.titleRow}>
               {onExit && (
-                <Pressable onPress={onExit} style={styles.homeButton}>
+                <Pressable onPress={() => setShowExitConfirm(true)} style={styles.homeButton}>
                   <Text style={styles.homeButtonText}>🏠</Text>
                 </Pressable>
               )}
@@ -358,6 +359,23 @@ export function GameScreen({ onExit }: { onExit?: () => void }) {
             onHome={onExit}
           />
         </Animated.View>
+
+        <Modal transparent animationType="fade" visible={showExitConfirm} onRequestClose={() => setShowExitConfirm(false)}>
+          <View style={styles.exitOverlay}>
+            <View style={styles.exitBox}>
+              <Text style={styles.exitTitle}>Exit game?</Text>
+              <Text style={styles.exitBody}>Your progress will be lost.</Text>
+              <View style={styles.exitButtons}>
+                <Pressable style={styles.exitCancel} onPress={() => setShowExitConfirm(false)}>
+                  <Text style={styles.exitCancelText}>Keep playing</Text>
+                </Pressable>
+                <Pressable style={styles.exitConfirm} onPress={() => { setShowExitConfirm(false); void stopMusic(); onExit?.(); }}>
+                  <Text style={styles.exitConfirmText}>Exit 🏠</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </SafeAreaView>
     </GestureHandlerRootView>
   );
@@ -483,5 +501,64 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "900",
     lineHeight: 22
+  },
+
+  exitOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.55)",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  exitBox: {
+    backgroundColor: "#fffaf3",
+    borderRadius: 20,
+    padding: 28,
+    width: 280,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 8
+  },
+  exitTitle: {
+    fontFamily: "TitanOne_400Regular",
+    fontSize: 22,
+    color: "#2c2c2c",
+    marginBottom: 8
+  },
+  exitBody: {
+    fontSize: 14,
+    color: "#886644",
+    marginBottom: 24,
+    textAlign: "center"
+  },
+  exitButtons: {
+    flexDirection: "row",
+    gap: 12
+  },
+  exitCancel: {
+    flex: 1,
+    backgroundColor: "#e8e0d4",
+    borderRadius: 12,
+    paddingVertical: 12,
+    alignItems: "center"
+  },
+  exitCancelText: {
+    fontFamily: "TitanOne_400Regular",
+    fontSize: 13,
+    color: "#5b4a30"
+  },
+  exitConfirm: {
+    flex: 1,
+    backgroundColor: "#e84040",
+    borderRadius: 12,
+    paddingVertical: 12,
+    alignItems: "center"
+  },
+  exitConfirmText: {
+    fontFamily: "TitanOne_400Regular",
+    fontSize: 13,
+    color: "#fff"
   }
 });
